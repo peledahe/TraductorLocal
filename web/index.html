@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+  <meta name="color-scheme" content="light dark">
+  <title>Traductor Local - LibreTranslate EN ⇄ ES</title>
+  <script>
+    // Carga rápida del tema guardado o detectado para evitar parpadeo blanco
+    (function() {
+      try {
+        const savedTheme = localStorage.getItem('traductor_local_theme');
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        const theme = savedTheme || (prefersDark ? 'dark' : 'light');
+        document.documentElement.setAttribute('data-theme', theme);
+      } catch (e) {}
+    })();
+  </script>
+  <link rel="stylesheet" href="styles.css?v=2.2">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%232563eb'><path d='M12.87 15.07l-2.54-2.51.03-.08A19.4 19.4 0 0013.2 6H16V4H9V2H7v2H0v2h11.17C10.5 7.92 9.4 10.1 8.2 12c-.75-.82-1.39-1.8-1.9-2.9l-1.8.8c.6 1.4 1.4 2.6 2.3 3.7l-4.5 4.5 1.4 1.4 4.5-4.5 2.8 2.8.9-2.7zM18.5 10h-2L12 22h2l1.12-3h4.75L21 22h2l-4.5-12zm-2.62 7l1.62-4.33L19.12 17h-3.24z'/></svg>">
+</head>
+<body>
+  <!-- Contenedor de notificaciones Sticky Toast -->
+  <div id="toast-container" class="toast-container" aria-live="polite"></div>
+
+  <!-- Modal de confirmación genérico -->
+  <div id="confirm-modal" class="modal-overlay" role="dialog" aria-modal="true" aria-hidden="true">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 id="modal-title" class="modal-title">¿Estás seguro?</h3>
+        <button id="modal-close-btn" class="modal-close" aria-label="Cerrar">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p id="modal-message">Esta acción no se puede deshacer.</p>
+      </div>
+      <div class="modal-footer">
+        <button id="modal-cancel-btn" class="btn btn-secondary">Cancelar</button>
+        <button id="modal-confirm-btn" class="btn btn-danger">Confirmar</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="app-layout">
+    <!-- Encabezado -->
+    <header class="app-header">
+      <div class="header-brand">
+        <div class="brand-icon">
+          <svg viewBox="0 0 24 24" width="28" height="28" fill="currentColor">
+            <path d="M12.87 15.07l-2.54-2.51.03-.08A19.4 19.4 0 0013.2 6H16V4H9V2H7v2H0v2h11.17C10.5 7.92 9.4 10.1 8.2 12c-.75-.82-1.39-1.8-1.9-2.9l-1.8.8c.6 1.4 1.4 2.6 2.3 3.7l-4.5 4.5 1.4 1.4 4.5-4.5 2.8 2.8.9-2.7zM18.5 10h-2L12 22h2l1.12-3h4.75L21 22h2l-4.5-12zm-2.62 7l1.62-4.33L19.12 17h-3.24z"/>
+          </svg>
+        </div>
+        <div>
+          <h1 class="brand-title">Traductor Local</h1>
+          <p class="brand-subtitle">Impulsado por LibreTranslate • Un desarrollo de merke.net</p>
+        </div>
+      </div>
+
+      <div class="header-actions">
+        <button id="theme-toggle-btn" class="btn-theme-toggle" title="Cambiar tema (claro / oscuro)" aria-label="Cambiar tema">
+          <svg id="theme-icon-sun" class="theme-icon hidden" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="5"></circle>
+            <line x1="12" y1="1" x2="12" y2="3"></line>
+            <line x1="12" y1="21" x2="12" y2="23"></line>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+            <line x1="1" y1="12" x2="3" y2="12"></line>
+            <line x1="21" y1="12" x2="23" y2="12"></line>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+          </svg>
+          <svg id="theme-icon-moon" class="theme-icon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+          </svg>
+        </button>
+
+        <span id="backend-status-pill" class="status-pill status-loading" title="Estado del motor LibreTranslate">
+          <span class="status-dot"></span>
+          <span id="backend-status-text">Conectando...</span>
+        </span>
+      </div>
+    </header>
+
+    <!-- Contenido Principal -->
+    <main class="translator-container">
+      <!-- Selector de Modo: Traducir Texto vs Traducir Archivos -->
+      <div class="tabs-nav">
+        <button id="tab-text-btn" class="tab-btn active" type="button">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
+            <path d="M12.87 15.07l-2.54-2.51.03-.08A19.4 19.4 0 0013.2 6H16V4H9V2H7v2H0v2h11.17C10.5 7.92 9.4 10.1 8.2 12c-.75-.82-1.39-1.8-1.9-2.9l-1.8.8c.6 1.4 1.4 2.6 2.3 3.7l-4.5 4.5 1.4 1.4 4.5-4.5 2.8 2.8.9-2.7zM18.5 10h-2L12 22h2l1.12-3h4.75L21 22h2l-4.5-12zm-2.62 7l1.62-4.33L19.12 17h-3.24z"/>
+          </svg>
+          TRADUCIR TEXTO
+        </button>
+        <button id="tab-file-btn" class="tab-btn" type="button">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
+            <path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/>
+          </svg>
+          TRADUCIR ARCHIVOS
+        </button>
+      </div>
+
+      <!-- Barra superior de selección de idiomas -->
+      <section class="language-bar">
+        <!-- Selector Origen -->
+        <div class="lang-selector-group">
+          <label for="source-lang-select" class="lang-label">Origen:</label>
+          <select id="source-lang-select" class="lang-select">
+            <option value="auto" selected>Auto-detectar idioma</option>
+            <option value="en">Inglés (English)</option>
+            <option value="es">Español</option>
+          </select>
+          <span id="detected-badge" class="detected-badge hidden" title="Idioma detectado">
+            Detectado: <strong id="detected-lang-name">Inglés</strong>
+          </span>
+        </div>
+
+        <!-- Botón Intercambiar (Swap) -->
+        <button id="swap-lang-btn" class="btn-swap" title="Intercambiar idiomas" aria-label="Intercambiar idiomas">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M7 16l-4-4m0 0l4-4m-4 4h18m-4 4l4 4m0 0l-4 4m4-4H3"></path>
+          </svg>
+        </button>
+
+        <!-- Selector Destino -->
+        <div class="lang-selector-group">
+          <label for="target-lang-select" class="lang-label">Destino:</label>
+          <select id="target-lang-select" class="lang-select">
+            <option value="smart_auto" selected>✨ Automático (EN ⇄ ES)</option>
+            <option value="es">Español</option>
+            <option value="en">Inglés (English)</option>
+          </select>
+          <span id="auto-mode-hint" class="mode-hint" title="Lógica inteligente activa">
+            (Auto: Si escribes inglés → traduce a español; si escribes español → inglés)
+          </span>
+        </div>
+      </section>
+
+      <!-- Paneles de Texto (Split View) -->
+      <section id="text-translation-section" class="translation-boxes">
+        <!-- Caja de entrada -->
+        <div class="box-card source-card">
+          <div class="box-card-header">
+            <span class="box-title">Texto original</span>
+            <div class="box-header-actions">
+              <button id="clear-source-btn" class="btn-text-action" title="Limpiar texto">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+                Limpiar
+              </button>
+            </div>
+          </div>
+
+          <div class="textarea-wrapper">
+            <textarea
+              id="source-text"
+              class="translation-textarea"
+              placeholder="Escribe o pega texto aquí... (Ej: Which categories do they fit? (pick any that fit, or none))"
+              spellcheck="false"
+              autofocus
+            ></textarea>
+          </div>
+
+          <div class="box-card-footer">
+            <span id="source-stats" class="text-stats">0 caracteres • 0 palabras</span>
+            <div class="footer-buttons">
+              <button id="paste-btn" class="btn-icon" title="Pegar portapapeles">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect></svg>
+                Pegar
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Caja de salida -->
+        <div class="box-card target-card">
+          <div class="box-card-header">
+            <span class="box-title">Traducción</span>
+            <div id="translating-indicator" class="translating-indicator hidden">
+              <span class="spinner"></span>
+              <span>Traduciendo...</span>
+            </div>
+          </div>
+
+          <div class="textarea-wrapper">
+            <textarea
+              id="target-text"
+              class="translation-textarea target-textarea"
+              placeholder="La traducción aparecerá aquí..."
+              readonly
+            ></textarea>
+          </div>
+
+          <div class="box-card-footer">
+            <span id="target-stats" class="text-stats">0 caracteres</span>
+            <div class="footer-buttons">
+              <button id="speak-btn" class="btn-icon" title="Escuchar pronunciación">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg>
+                Escuchar
+              </button>
+              <button id="save-favorite-btn" class="btn-icon" title="Guardar traducción en historial">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                Guardar
+              </button>
+              <button id="copy-target-btn" class="btn-icon btn-copy" title="Copiar traducción">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                Copiar
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Sección de Traducción de Archivos -->
+      <section id="file-translation-section" class="file-translation-section hidden">
+        <div class="file-card">
+          <div class="file-card-info">
+            <span class="file-formats-badge">
+              Formatos de archivo compatibles: <strong>.txt, .odt, .odp, .docx, .pptx, .epub, .html, .srt, .pdf, .md</strong>
+            </span>
+          </div>
+
+          <!-- Zona de Drag & Drop -->
+          <div id="file-dropzone" class="file-dropzone">
+            <input type="file" id="file-input" class="file-input-hidden" accept=".txt,.odt,.odp,.docx,.pptx,.epub,.html,.srt,.pdf,.md">
+            <div class="dropzone-content">
+              <div class="dropzone-icon">
+                <svg viewBox="0 0 24 24" width="48" height="48" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                  <polyline points="17 8 12 3 7 8"></polyline>
+                  <line x1="12" y1="3" x2="12" y2="15"></line>
+                </svg>
+              </div>
+              <p class="dropzone-text">Arrastra y suelta tu archivo aquí, o</p>
+              <button id="browse-file-btn" type="button" class="btn btn-primary btn-file-select">
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
+                  <path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm4 18H6V4h7v5h5v11z"/>
+                </svg>
+                SELECCIONAR ARCHIVO
+              </button>
+            </div>
+          </div>
+
+          <!-- Vista previa del archivo seleccionado -->
+          <div id="file-preview-card" class="file-preview-card hidden">
+            <div class="file-preview-header">
+              <div class="file-preview-icon">
+                <svg viewBox="0 0 24 24" width="32" height="32" fill="currentColor">
+                  <path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/>
+                </svg>
+              </div>
+              <div class="file-preview-meta">
+                <strong id="preview-filename" class="preview-filename">documento.pdf</strong>
+                <span id="preview-filesize" class="preview-filesize">0 KB</span>
+              </div>
+              <button id="remove-file-btn" class="btn-text-action btn-remove-file" title="Quitar archivo">
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+                Quitar
+              </button>
+            </div>
+
+            <!-- Botón de traducir y progreso -->
+            <div class="file-action-wrapper">
+              <button id="translate-file-btn" class="btn btn-primary btn-lg">
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+                  <path d="M12.87 15.07l-2.54-2.51.03-.08A19.4 19.4 0 0013.2 6H16V4H9V2H7v2H0v2h11.17C10.5 7.92 9.4 10.1 8.2 12c-.75-.82-1.39-1.8-1.9-2.9l-1.8.8c.6 1.4 1.4 2.6 2.3 3.7l-4.5 4.5 1.4 1.4 4.5-4.5 2.8 2.8.9-2.7zM18.5 10h-2L12 22h2l1.12-3h4.75L21 22h2l-4.5-12zm-2.62 7l1.62-4.33L19.12 17h-3.24z"/>
+                </svg>
+                Traducir archivo
+              </button>
+
+              <div id="file-progress-container" class="file-progress-container hidden">
+                <div class="progress-spinner">
+                  <span class="spinner"></span>
+                  <span id="file-progress-text">Traduciendo archivo localmente... por favor espera.</span>
+                </div>
+              </div>
+
+              <!-- Descarga del archivo traducido -->
+              <div id="file-result-container" class="file-result-container hidden">
+                <div class="result-success-alert">
+                  <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor" style="color: #10b981;">
+                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                  </svg>
+                  <div>
+                    <strong>¡Traducción completada!</strong>
+                    <p>Tu archivo traducido está listo para descargar.</p>
+                  </div>
+                </div>
+                <a id="download-file-btn" class="btn btn-success btn-lg download-link" href="#" download>
+                  <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                    <polyline points="7 10 12 15 17 10"></polyline>
+                    <line x1="12" y1="15" x2="12" y2="3"></line>
+                  </svg>
+                  DESCARGAR ARCHIVO TRADUCIDO
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section class="history-section">
+        <div class="history-header">
+          <div class="history-title-group">
+            <h2 class="history-title">Traducciones Guardadas</h2>
+            <span id="history-count-badge" class="badge">0</span>
+          </div>
+          <button id="clear-all-history-btn" class="btn btn-secondary btn-sm" disabled>
+            Vaciar historial
+          </button>
+        </div>
+
+        <div id="history-empty" class="history-empty">
+          <p>No tienes traducciones guardadas todavía. Haz clic en "Guardar" para almacenar una consulta recurrente.</p>
+        </div>
+
+        <div id="history-list" class="history-list"></div>
+      </section>
+    </main>
+
+    <!-- Pie de página con créditos explícitos al proyecto original y autor -->
+    <footer class="app-footer">
+      <div class="footer-content">
+        <p class="footer-primary">
+          Traductor Local autónomo y sin telemetría externa • Un desarrollo de <a href="https://merke.net" target="_blank" rel="noopener noreferrer" class="credit-link"><strong>merke.net</strong></a>
+        </p>
+        <p class="footer-credits">
+          Basado en el software libre y de código abierto
+          <a href="https://github.com/LibreTranslate/LibreTranslate" target="_blank" rel="noopener noreferrer" class="credit-link">
+            <strong>LibreTranslate</strong>
+          </a>
+          (Licencia AGPLv3) creado por Piergiuseppe Mallozzi y la comunidad open source.
+          Página oficial de referencia:
+          <a href="https://libretranslate.com/" target="_blank" rel="noopener noreferrer" class="credit-link">
+            libretranslate.com
+          </a>.
+        </p>
+      </div>
+    </footer>
+  </div>
+
+  <script src="app.js?v=2.2"></script>
+</body>
+</html>
