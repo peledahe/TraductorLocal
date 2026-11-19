@@ -44,6 +44,8 @@
   const detectedLangName = document.getElementById('detected-lang-name');
   const swapBtn = document.getElementById('swap-lang-btn');
   const clearBtn = document.getElementById('clear-source-btn');
+  const micBtn = document.getElementById('mic-btn');
+  const micBtnLabel = document.getElementById('mic-btn-label');
   const pasteBtn = document.getElementById('paste-btn');
   const copyBtn = document.getElementById('copy-target-btn');
   const saveBtn = document.getElementById('save-favorite-btn');
@@ -405,6 +407,7 @@
   // Intercambiar idiomas (Swap)
   // ========================================================
   function handleSwap() {
+    stopDictation(false);
     const srcVal = sourceLangSelect.value;
     const tgtVal = targetLangSelect.value;
     const srcTxt = sourceText.value;
@@ -436,6 +439,7 @@
   // Limpieza con Modal de Confirmación
   // ========================================================
   function handleClear() {
+    stopDictation(false);
     sourceText.value = '';
     targetText.value = '';
     detectedBadge.classList.add('hidden');
@@ -526,6 +530,326 @@
     utterance.lang = targetLang === 'en' ? 'en-US' : 'es-ES';
     window.speechSynthesis.speak(utterance);
     showStickyToast(`Reproduciendo audio en ${LANG_NAMES[targetLang] || targetLang}...`, 'info', 2000);
+  }
+
+  // ========================================================
+  // Dictado por voz (SpeechRecognition)
+  // ========================================================
+  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+  let recognitionInstance = null;
+  let isDictating = false;
+  let dictationBaseText = '';
+  let isAwaitingLanguagePrefix = true;
+  let isRestartingForLanguage = false;
+
+  const VOICE_LANG_TRIGGERS = {
+    // Español
+    'español': 'es',
+    'espanol': 'es',
+    'spanish': 'es',
+    'castellano': 'es',
+    'en español': 'es',
+    'en espanol': 'es',
+    'al español': 'es',
+    'a español': 'es',
+    'idioma español': 'es',
+    'idioma espanol': 'es',
+
+    // Inglés
+    'inglés': 'en',
+    'ingles': 'en',
+    'english': 'en',
+    'en inglés': 'en',
+    'en ingles': 'en',
+    'al inglés': 'en',
+    'al ingles': 'en',
+    'a inglés': 'en',
+    'a ingles': 'en',
+    'idioma inglés': 'en',
+    'idioma ingles': 'en',
+
+    // Francés
+    'francés': 'fr',
+    'frances': 'fr',
+    'french': 'fr',
+    'en francés': 'fr',
+    'en frances': 'fr',
+    'al francés': 'fr',
+    'a francés': 'fr',
+
+    // Alemán
+    'alemán': 'de',
+    'aleman': 'de',
+    'german': 'de',
+    'en alemán': 'de',
+    'en aleman': 'de',
+    'al alemán': 'de',
+    'a alemán': 'de',
+
+    // Italiano
+    'italiano': 'it',
+    'italian': 'it',
+    'en italiano': 'it',
+    'al italiano': 'it',
+    'a italiano': 'it',
+
+    // Portugués
+    'portugués': 'pt',
+    'portugues': 'pt',
+    'portuguese': 'pt',
+    'en portugués': 'pt',
+    'en portugues': 'pt',
+    'al portugués': 'pt',
+    'a portugués': 'pt',
+
+    // Ruso
+    'ruso': 'ru',
+    'russian': 'ru',
+    'en ruso': 'ru',
+    'al ruso': 'ru',
+    'a ruso': 'ru',
+
+    // Chino
+    'chino': 'zh',
+    'chinese': 'zh',
+    'en chino': 'zh',
+    'al chino': 'zh',
+    'a chino': 'zh',
+
+    // Japonés
+    'japonés': 'ja',
+    'japones': 'ja',
+    'japanese': 'ja',
+    'en japonés': 'ja',
+    'al japonés': 'ja',
+    'a japonés': 'ja',
+
+    // Coreano
+    'coreano': 'ko',
+    'korean': 'ko',
+    'en coreano': 'ko',
+    'al coreano': 'ko',
+    'a coreano': 'ko',
+
+    // Catalán
+    'catalán': 'ca',
+    'catalan': 'ca',
+    'en catalán': 'ca',
+    'al catalán': 'ca',
+    'a catalán': 'ca',
+
+    // Holandés
+    'holandés': 'nl',
+    'holandes': 'nl',
+    'dutch': 'nl',
+    'en holandés': 'nl',
+    'al holandés': 'nl',
+    'a holandés': 'nl',
+
+    // Árabe
+    'árabe': 'ar',
+    'arabe': 'ar',
+    'arabic': 'ar',
+    'en árabe': 'ar',
+    'al árabe': 'ar',
+    'a árabe': 'ar',
+
+    // Hindi
+    'hindi': 'hi',
+    'en hindi': 'hi',
+    'al hindi': 'hi',
+    'a hindi': 'hi'
+  };
+
+  function checkLanguageVoiceTrigger(phrase) {
+    if (!phrase) return null;
+    const clean = phrase.trim().toLowerCase().replace(/[.,!?:;¿¡]/g, '').trim();
+    return VOICE_LANG_TRIGGERS[clean] || null;
+  }
+
+  function getSpeechRecognitionLang() {
+    let lang = sourceLangSelect.value;
+    if (lang === 'auto') {
+      lang = currentDetectedLang || (navigator.language ? navigator.language.slice(0, 2) : 'es');
+    }
+    const map = {
+      es: 'es-ES',
+      en: 'en-US',
+      fr: 'fr-FR',
+      de: 'de-DE',
+      it: 'it-IT',
+      pt: 'pt-PT',
+      ru: 'ru-RU',
+      zh: 'zh-CN',
+      ja: 'ja-JP',
+      ko: 'ko-KR',
+      ca: 'ca-ES',
+      nl: 'nl-NL',
+      ar: 'ar-SA',
+      hi: 'hi-IN'
+    };
+    return map[lang] || navigator.language || 'es-ES';
+  }
+
+  function stopDictation(notify = false) {
+    isRestartingForLanguage = false;
+    isAwaitingLanguagePrefix = false;
+    if (recognitionInstance) {
+      try {
+        recognitionInstance.stop();
+      } catch (e) {}
+      recognitionInstance = null;
+    }
+    if (isDictating) {
+      isDictating = false;
+      if (micBtn) micBtn.classList.remove('listening');
+      if (micBtnLabel) micBtnLabel.textContent = 'Dictar';
+      if (notify) {
+        showStickyToast('Dictado por voz finalizado', 'info', 2000);
+      }
+    }
+  }
+
+  function startRecognition(checkPrefix = true) {
+    if (!SpeechRecognition) {
+      showStickyToast(
+        'El dictado por voz requiere un navegador compatible (Chrome, Edge, Brave o Chromium en HTTPS).',
+        'danger',
+        5000
+      );
+      return;
+    }
+
+    try {
+      const recognition = new SpeechRecognition();
+      recognitionInstance = recognition;
+      recognition.continuous = true;
+      recognition.interimResults = true;
+      recognition.lang = getSpeechRecognitionLang();
+
+      isAwaitingLanguagePrefix = checkPrefix;
+      isRestartingForLanguage = false;
+
+      recognition.onstart = () => {
+        isDictating = true;
+        if (micBtn) micBtn.classList.add('listening');
+        if (micBtnLabel) micBtnLabel.textContent = 'Escuchando...';
+
+        const langCode = sourceLangSelect.value;
+        const langDisplay = langCode === 'auto' ? 'Auto (' + (LANG_NAMES[currentDetectedLang] || currentDetectedLang) + ')' : (LANG_NAMES[langCode] || langCode);
+
+        if (checkPrefix) {
+          showStickyToast(`🎤 Micrófono activo (${langDisplay}). Si dices un idioma al inicio y pausas, cambiará a ese lenguaje.`, 'info', 4000);
+        } else {
+          showStickyToast(`🎤 Micrófono listo en ${langDisplay}. Dicta ahora...`, 'info', 3000);
+        }
+      };
+
+      recognition.onresult = (event) => {
+        let interimTranscript = '';
+        let finalTranscript = '';
+
+        for (let i = event.resultIndex; i < event.results.length; ++i) {
+          const item = event.results[i];
+          if (item && item[0]) {
+            if (item.isFinal) {
+              finalTranscript += item[0].transcript;
+            } else {
+              interimTranscript += item[0].transcript;
+            }
+          }
+        }
+
+        // Detección de idioma por voz al inicio seguido de pausa
+        if (isAwaitingLanguagePrefix && !dictationBaseText.trim()) {
+          const rawSpoken = (finalTranscript || interimTranscript).trim();
+          const matchedLang = checkLanguageVoiceTrigger(rawSpoken);
+
+          if (matchedLang) {
+            // Si el motor ya marcó la palabra como final (hubo pausa tras pronunciar el idioma):
+            if (finalTranscript) {
+              isAwaitingLanguagePrefix = false;
+              // Cambiar idioma origen en la UI y estado
+              sourceLangSelect.value = matchedLang;
+              currentDetectedLang = matchedLang;
+              detectedBadge.classList.remove('hidden');
+              detectedLangName.textContent = LANG_NAMES[matchedLang] || matchedLang.toUpperCase();
+
+              showStickyToast(
+                `🎙️ Idioma cambiado a ${LANG_NAMES[matchedLang] || matchedLang}. Habla después de la pausa...`,
+                'success',
+                3500
+              );
+
+              // Reiniciar el reconocimiento con el modelo de voz del nuevo idioma
+              isRestartingForLanguage = true;
+              recognition.stop();
+              return;
+            } else {
+              // Interim mientras habla el nombre del idioma
+              if (micBtnLabel) micBtnLabel.textContent = `Idioma: ${LANG_NAMES[matchedLang]}...`;
+              return;
+            }
+          } else {
+            // Si dijo una oración completa o palabras normales, no es un comando de idioma
+            const wordCount = rawSpoken.split(/\s+/).filter(Boolean).length;
+            if (wordCount > 1 || (finalTranscript && !matchedLang)) {
+              isAwaitingLanguagePrefix = false;
+              if (micBtnLabel) micBtnLabel.textContent = 'Escuchando...';
+            }
+          }
+        }
+
+        if (finalTranscript) {
+          dictationBaseText += finalTranscript + ' ';
+        }
+
+        sourceText.value = (dictationBaseText + interimTranscript).trimStart();
+        updateStats();
+        triggerTranslationDebounced();
+      };
+
+      recognition.onerror = (event) => {
+        console.warn('SpeechRecognition error:', event.error);
+        if (event.error === 'not-allowed') {
+          showStickyToast(
+            'Permiso de micrófono denegado. Permite el acceso al micrófono en el candado de la URL.',
+            'danger',
+            5000
+          );
+          stopDictation(false);
+        } else if (event.error !== 'no-speech') {
+          showStickyToast(`Aviso de micrófono: ${event.error}`, 'warning', 3000);
+          stopDictation(false);
+        }
+      };
+
+      recognition.onend = () => {
+        if (isRestartingForLanguage) {
+          // Reanudar inmediatamente con el nuevo idioma
+          setTimeout(() => {
+            startRecognition(false);
+          }, 150);
+          return;
+        }
+        stopDictation(false);
+      };
+
+      recognition.start();
+    } catch (err) {
+      console.error('Error al iniciar SpeechRecognition:', err);
+      showStickyToast('No se pudo activar el micrófono: ' + err.message, 'danger', 4000);
+      stopDictation(false);
+    }
+  }
+
+  function handleDictate() {
+    if (isDictating) {
+      stopDictation(true);
+      return;
+    }
+    dictationBaseText = sourceText.value ? (sourceText.value.trim() + ' ') : '';
+    startRecognition(true);
   }
 
   // ========================================================
@@ -975,6 +1299,7 @@
 
     swapBtn.addEventListener('click', handleSwap);
     clearBtn.addEventListener('click', handleClear);
+    if (micBtn) micBtn.addEventListener('click', handleDictate);
     pasteBtn.addEventListener('click', handlePaste);
     copyBtn.addEventListener('click', handleCopy);
     saveBtn.addEventListener('click', handleSaveFavorite);

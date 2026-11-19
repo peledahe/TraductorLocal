@@ -1,9 +1,10 @@
 # Estado Actual del Proyecto
 
 ## Implementación Completada
+- **Dictado por Voz con Comando Inicial de Idioma**: Incorporado botón de dictado con micrófono y comando de voz al inicio. Si se pronuncia un idioma al inicio y se hace una pausa, el sistema conmuta automáticamente al idioma indicado y reanuda el dictado para transcribir y traducir en ese lenguaje. En caso contrario, dicta normalmente.
 - **Soporte HTTPS y Portapapeles**: Habilitado puerto 443 (HTTPS) con certificado SSL y Autoridad Certificadora (CA) propia para `translate.local` (`instalar-certificado.sh` para confianza en sistema y navegadores sin alertas). Soporte nativo para lectura de portapapeles sin restricciones.
 - **Control de Versiones (.gitignore)**: Configurado y aplicado para excluir modelos pesados (>3 GB en `data/libretranslate`), certificados y claves privadas SSL (`data/certs`), entornos virtuales (`venv`), caché (`__pycache__`) y logs, manteniendo la estructura de directorios mediante `.gitkeep`.
-- **Versión Activa**: v2.3 desplegada en `https://translate.local`, `http://translate.local` y `http://localhost`.
+- **Versión Activa**: v2.5 desplegada en `https://translate.local`, `http://translate.local` y `http://localhost`.
 - **Temas y Responsivo**: Modo Oscuro y Modo Claro con toggle dinámico e interfaz móvil optimizada para mostrar solo lo esencial.
 - **Arranque Automático**: Configurado con política `restart: always` en Docker Compose y servicio systemd opcional (`traductor-local.service`).
 - **Dominio y Puertos**: Mapeado al puerto estándar `80` (HTTP) y `8080`. Accesible vía `http://translate.local` y `http://localhost`.

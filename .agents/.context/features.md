@@ -38,6 +38,15 @@
   - **Traducción de archivos compacta**: Padding reducido y botones táctiles optimizados.
 
 ## 5. Experiencia de Usuario (UI/UX)
+- **Dictado por Voz (Speech-to-Text)**:
+  - Botón "Dictar" con micrófono en el panel de texto original.
+  - **Comando inicial por voz de idioma con pausa**: si al iniciar el dictado se dice el nombre de un idioma (ej. *"Inglés"*, *"Español"*, *"Francés"*, etc.) y se hace una pausa, el sistema cambia automáticamente al idioma indicado y reanuda el dictado para recibir lo que se hable en ese lenguaje.
+  - De no indicarse un idioma al inicio o dictar directamente una oración, actúa normalmente sobre el idioma activo.
+  - Reconocimiento de voz continuo y en tiempo real usando Web Speech API.
+  - Ajuste dinámico del modelo fonético de reconocimiento según el idioma origen.
+  - Indicador visual animado (pulso rojo y etiqueta "Escuchando...").
+  - Notificaciones sticky de estado (micrófono activo, cambio de idioma por voz o errores de permisos).
+  - Activación automática de la traducción mientras se dicta.
 - Notificaciones Sticky (Toast) permanentes/temporales en esquina superior derecha para eventos:
   - Copiado al portapapeles ("Texto copiado con éxito").
   - Traducción guardada en favoritos.
