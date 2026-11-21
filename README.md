@@ -4,6 +4,10 @@ Versión local, privada y optimizada de [LibreTranslate](https://github.com/Libr
 
 ## Características Principales
 
+- **Integración Opcional de IAs (Gemini, Claude, ChatGPT, DeepSeek)**:
+  - Panel administrativo accesible desde el icono de configuración (⚙️) para ingresar API Keys.
+  - Al activar una IA, el título conmuta a **Traductor con IA** y se habilita el selector de IA en el formulario.
+  - Flujo híbrido de traducción: realiza primero la traducción local con LibreTranslate y luego se apoya en la IA elegida para perfeccionar el resultado de forma idiomática y natural.
 - **Modo Oscuro y Modo Claro**:
   - Selector en la cabecera (☀️ / 🌙) con detección de preferencia del sistema y guardado local.
 - **Diseño Responsivo Esencial**:

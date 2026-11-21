@@ -16,8 +16,8 @@
       } catch (e) {}
     })();
   </script>
-  <link rel="stylesheet" href="styles.css?v=2.2">
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%232563eb'><path d='M12.87 15.07l-2.54-2.51.03-.08A19.4 19.4 0 0013.2 6H16V4H9V2H7v2H0v2h11.17C10.5 7.92 9.4 10.1 8.2 12c-.75-.82-1.39-1.8-1.9-2.9l-1.8.8c.6 1.4 1.4 2.6 2.3 3.7l-4.5 4.5 1.4 1.4 4.5-4.5 2.8 2.8.9-2.7zM18.5 10h-2L12 22h2l1.12-3h4.75L21 22h2l-4.5-12zm-2.62 7l1.62-4.33L19.12 17h-3.24z'/></svg>">
+  <link rel="stylesheet" href="styles.css?v=2.5">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 640 512' fill='%232563eb'><path d='M152.1 236.2c-3.5-12.1-7.8-24.3-13-36.2l-1.3 4.2c-5.8 18.5-12.8 36.6-21.2 54.1l35.5-22.1zm88.5 76.9c-16.4-31-31.4-65.7-44.8-103.5l1.8-6.1c11.4-38.3 19.3-78.6 23.3-120.3L256 83.2H128V32H80v51.2H0v48h160.8c-3.7 34.6-10.4 67.9-19.8 99.4-10.2-24.9-18.5-51.4-24.7-79.4H68.8c6.6 34.2 16.8 66.8 30.3 97.4-23.7 34.7-53.7 65.5-89.1 91.2l31.5 36.8c42.8-30.8 78.8-68.1 106.8-110.5 20.2 44.9 44.7 86.8 72.8 124.7l39.5-32.9zm135.4-89.9l-64 160h46.2l13.1-34.9h67.4l13.1 34.9H500l-64-160h-60zm10.7 89.1l20.4-54.4 20.4 54.4h-40.8zM576 32H352c-17.7 0-32 14.3-32 32v96h48V80h192v288h-64v48h64c17.7 0 32-14.3 32-32V64c0-17.7-14.3-32-32-32z'/></svg>">
 </head>
 <body>
   <!-- Contenedor de notificaciones Sticky Toast -->
@@ -28,7 +28,11 @@
     <div class="modal-card">
       <div class="modal-header">
         <h3 id="modal-title" class="modal-title">¿Estás seguro?</h3>
-        <button id="modal-close-btn" class="modal-close" aria-label="Cerrar">&times;</button>
+        <button id="modal-close-btn" class="modal-close" aria-label="Cerrar">
+          <svg viewBox="0 0 384 512" width="14" height="14" fill="currentColor">
+            <path d="M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z"/>
+          </svg>
+        </button>
       </div>
       <div class="modal-body">
         <p id="modal-message">Esta acción no se puede deshacer.</p>
@@ -40,36 +44,796 @@
     </div>
   </div>
 
+  <!-- Modal Administrativo de Configuración de IAs -->
+  <div id="admin-modal" class="modal-overlay" role="dialog" aria-modal="true" aria-hidden="true">
+    <div class="modal-card modal-admin-card">
+      <div class="modal-header">
+        <div class="admin-modal-title-group">
+          <svg viewBox="0 0 512 512" width="19" height="19" fill="currentColor">
+            <path d="M495.9 166.6c3.2 8.7 .5 18.4-6.4 24.6l-43.3 39.4c1.1 8.3 1.7 16.8 1.7 25.4s-.6 17.1-1.7 25.4l43.3 39.4c6.9 6.2 9.6 15.9 6.4 24.6-4.4 11.9-9.7 23.3-15.8 34.3l-4.7 8.1c-6.6 11-14 21.4-22.1 31.2-5.9 7.2-15.7 10.7-25 8.7l-56.8-12.1c-12 10.2-25.5 18.7-40.2 25.1l-10.7 57.4c-1.8 9.5-9.2 17-18.8 18.8-12.5 2.4-25.3 3.6-38.3 3.6s-25.8-1.2-38.3-3.6c-9.6-1.8-17-9.3-18.8-18.8l-10.7-57.4c-14.7-6.4-28.2-14.9-40.2-25.1l-56.8 12.1c-9.3 2-19.1-1.5-25-8.7-8.1-9.8-15.5-20.2-22.1-31.2l-4.7-8.1c-6.1-11-11.4-22.4-15.8-34.3-3.2-8.7-.5-18.4 6.4-24.6l43.3-39.4c-1.1-8.4-1.7-16.9-1.7-25.5s.6-17.1 1.7-25.4l-43.3-39.4c-6.9-6.2-9.6-15.9-6.4-24.6 4.4-11.9 9.7-23.3 15.8-34.3l4.7-8.1c6.6-11 14-21.4 22.1-31.2 5.9-7.2 15.7-10.7 25-8.7l56.8 12.1c12-10.2 25.5-18.7 40.2-25.1l10.7-57.4c1.8-9.5 9.2-17 18.8-18.8 12.5-2.4 25.3-3.6 38.3-3.6s25.8 1.2 38.3 3.6c9.6 1.8 17 9.3 18.8 18.8l10.7 57.4c14.7 6.4 28.2 14.9 40.2 25.1l56.8-12.1c9.3-2 19.1 1.5 25 8.7 8.1 9.8 15.5 20.2 22.1 31.2l4.7 8.1c6.1 11 11.4 22.4 15.8 34.3zM256 336a80 80 0 1 0 0-160 80 80 0 1 0 0 160z"/>
+          </svg>
+          <h3 class="modal-title">Administración de IAs para Traducción</h3>
+        </div>
+        <button id="admin-close-btn" class="modal-close" aria-label="Cerrar">
+          <svg viewBox="0 0 384 512" width="14" height="14" fill="currentColor">
+            <path d="M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z"/>
+          </svg>
+        </button>
+      </div>
+
+      <div class="modal-body admin-body admin-body-layout">
+        <!-- Barra lateral de navegación entre IAs -->
+        <aside class="admin-sidebar" role="tablist" aria-label="Proveedores de IA">
+          <div class="admin-sidebar-header">
+            <span class="admin-sidebar-title">Modelos Disponibles</span>
+            <small class="admin-sidebar-subtitle">Selecciona para configurar</small>
+          </div>
+
+          <button type="button" class="ai-tab-btn active" data-provider="gemini" role="tab" aria-selected="true" aria-controls="panel-gemini">
+            <div class="ai-tab-brand">
+              <span class="ai-brand-badge gemini-badge">
+                <svg class="ai-brand-logo" viewBox="0 0 24 24" width="14" height="14" fill="currentColor">
+                  <path d="M11.04 19.32Q12 21.51 12 24q0-2.49.93-4.68.96-2.19 2.58-3.81t3.81-2.55Q21.51 12 24 12q-2.49 0-4.68-.93a12.3 12.3 0 0 1-3.81-2.58 12.3 12.3 0 0 1-2.58-3.81Q12 2.49 12 0q0 2.49-.96 4.68-.93 2.19-2.55 3.81a12.3 12.3 0 0 1-3.81 2.58Q2.49 12 0 12q2.49 0 4.68.96 2.19.93 3.81 2.55t2.55 3.81"/>
+                </svg>
+              </span>
+              <div class="ai-tab-info">
+                <span class="ai-tab-name">Google Gemini</span>
+                <span class="ai-tab-status-chip" id="tab-status-gemini">Inactivo</span>
+              </div>
+            </div>
+            <span class="ai-tab-chevron">›</span>
+          </button>
+
+          <button type="button" class="ai-tab-btn" data-provider="claude" role="tab" aria-selected="false" aria-controls="panel-claude">
+            <div class="ai-tab-brand">
+              <span class="ai-brand-badge claude-badge">
+                <svg class="ai-brand-logo" viewBox="0 0 24 24" width="14" height="14" fill="currentColor">
+                  <path fill-rule="evenodd" d="M4.709 15.955l4.72-2.647.08-.23-.08-.128H9.2l-.79-.048-2.698-.073-2.339-.097-2.266-.122-.571-.121L0 11.784l.055-.352.48-.321.686.06 1.52.103 2.278.158 1.652.097 2.449.255h.389l.055-.157-.134-.098-.103-.097-2.358-1.596-2.552-1.688-1.336-.972-.724-.491-.364-.462-.158-1.008.656-.722.881.06.225.061.893.686 1.908 1.476 2.491 1.833.365.304.145-.103.019-.073-.164-.274-1.355-2.446-1.446-2.49-.644-1.032-.17-.619a2.97 2.97 0 01-.104-.729L6.283.134 6.696 0l.996.134.42.364.62 1.414 1.002 2.229 1.555 3.03.456.898.243.832.091.255h.158V9.01l.128-1.706.237-2.095.23-2.695.08-.76.376-.91.747-.492.584.28.48.685-.067.444-.286 1.851-.559 2.903-.364 1.942h.212l.243-.242.985-1.306 1.652-2.064.73-.82.85-.904.547-.431h1.033l.76 1.129-.34 1.166-1.064 1.347-.881 1.142-1.264 1.7-.79 1.36.073.11.188-.02 2.856-.606 1.543-.28 1.841-.315.833.388.091.395-.328.807-1.969.486-2.309.462-3.439.813-.042.03.049.061 1.549.146.662.036h1.622l3.02.225.79.522.474.638-.079.485-1.215.62-1.64-.389-3.829-.91-1.312-.329h-.182v.11l1.093 1.068 2.006 1.81 2.509 2.33.127.578-.322.455-.34-.049-2.205-1.657-.851-.747-1.926-1.62h-.128v.17l.444.649 2.345 3.521.122 1.08-.17.353-.608.213-.668-.122-1.374-1.925-1.415-2.167-1.143-1.943-.14.08-.674 7.254-.316.37-.729.28-.607-.461-.322-.747.322-1.476.389-1.924.315-1.53.286-1.9.17-.632-.012-.042-.14.018-1.434 1.967-2.18 2.945-1.726 1.845-.414.164-.717-.37.067-.662.401-.589 2.388-3.036 1.44-1.882.93-1.086-.006-.158h-.055L4.132 18.56l-1.13.146-.487-.456.061-.746.231-.243 1.908-1.312-.006.006z"/>
+                </svg>
+              </span>
+              <div class="ai-tab-info">
+                <span class="ai-tab-name">Anthropic Claude</span>
+                <span class="ai-tab-status-chip" id="tab-status-claude">Inactivo</span>
+              </div>
+            </div>
+            <span class="ai-tab-chevron">›</span>
+          </button>
+
+          <button type="button" class="ai-tab-btn" data-provider="chatgpt" role="tab" aria-selected="false" aria-controls="panel-chatgpt">
+            <div class="ai-tab-brand">
+              <span class="ai-brand-badge openai-badge">
+                <svg class="ai-brand-logo" viewBox="0 0 24 24" width="14" height="14" fill="currentColor">
+                  <path d="M22.2819 9.8211a5.9847 5.9847 0 0 0-.5157-4.9108 6.0462 6.0462 0 0 0-6.5098-2.9A6.0651 6.0651 0 0 0 4.9807 4.1818a5.9847 5.9847 0 0 0-3.9977 2.9 6.0462 6.0462 0 0 0 .7427 7.0966 5.98 5.98 0 0 0 .511 4.9107 6.051 6.051 0 0 0 6.5146 2.9001A5.9847 5.9847 0 0 0 13.2599 24a6.0557 6.0557 0 0 0 5.7718-4.2058 5.9894 5.9894 0 0 0 3.9977-2.9001 6.0557 6.0557 0 0 0-.7475-7.0729zm-9.022 12.6081a4.4755 4.4755 0 0 1-2.8764-1.0408l.1419-.0804 4.7783-2.7582a.7948.7948 0 0 0 .3927-.6813v-6.7369l2.02 1.1686a.071.071 0 0 1 .038.052v5.5826a4.504 4.504 0 0 1-4.4945 4.4944zm-9.6607-4.1254a4.4708 4.4708 0 0 1-.5346-3.0137l.142.0852 4.783 2.7582a.7712.7712 0 0 0 .7806 0l5.8428-3.3685v2.3324a.0804.0804 0 0 1-.0332.0615L9.74 19.9502a4.4992 4.4992 0 0 1-6.1408-1.6464zM2.3408 7.8956a4.485 4.485 0 0 1 2.3655-1.9728V11.6a.7664.7664 0 0 0 .3879.6765l5.8144 3.3543-2.0201 1.1685a.0757.0757 0 0 1-.071 0l-4.8303-2.7865A4.504 4.504 0 0 1 2.3408 7.872zm16.5963 3.8558L13.1038 8.364 15.1192 7.2a.0757.0757 0 0 1 .071 0l4.8303 2.7913a4.4944 4.4944 0 0 1-.6765 8.1042v-5.6772a.79.79 0 0 0-.407-.667zm2.0107-3.0231l-.142-.0852-4.7735-2.7818a.7759.7759 0 0 0-.7854 0L9.409 9.2297V6.8974a.0662.0662 0 0 1 .0284-.0615l4.8303-2.7866a4.4992 4.4992 0 0 1 6.6802 4.66zM8.3065 12.863l-2.02-1.1638a.0804.0804 0 0 1-.038-.0567V6.0742a4.4992 4.4992 0 0 1 7.3757-3.4537l-.142.0805L8.704 5.459a.7948.7948 0 0 0-.3927.6813zm1.0976-2.3654l2.602-1.4998 2.6069 1.4998v2.9994l-2.5974 1.4997-2.6067-1.4997Z"/>
+                </svg>
+              </span>
+              <div class="ai-tab-info">
+                <span class="ai-tab-name">OpenAI ChatGPT</span>
+                <span class="ai-tab-status-chip" id="tab-status-chatgpt">Inactivo</span>
+              </div>
+            </div>
+            <span class="ai-tab-chevron">›</span>
+          </button>
+
+          <button type="button" class="ai-tab-btn" data-provider="deepseek" role="tab" aria-selected="false" aria-controls="panel-deepseek">
+            <div class="ai-tab-brand">
+              <span class="ai-brand-badge deepseek-badge">
+                <svg class="ai-brand-logo" viewBox="0 0 24 24" width="14" height="14" fill="currentColor">
+                  <path d="M23.748 4.651c-.254-.124-.364.113-.512.233-.051.04-.094.09-.137.137-.372.397-.806.657-1.373.626-.829-.046-1.537.214-2.163.848-.133-.782-.575-1.248-1.247-1.548-.352-.155-.708-.311-.955-.65-.172-.24-.219-.509-.305-.774-.055-.16-.11-.323-.293-.35-.2-.031-.278.136-.356.276-.313.572-.434 1.202-.422 1.84.027 1.436.633 2.58 1.838 3.393.137.094.172.187.129.323-.082.28-.18.553-.266.833-.055.179-.137.218-.328.14a5.5 5.5 0 0 1-1.737-1.179c-.857-.828-1.631-1.743-2.597-2.46a12 12 0 0 0-.689-.47c-.985-.957.13-1.743.387-1.836.27-.098.094-.433-.778-.428-.872.003-1.67.295-2.687.685a3 3 0 0 1-.465.136 9.6 9.6 0 0 0-2.883-.101c-1.885.21-3.39 1.1-4.497 2.622C.082 8.776-.231 10.854.152 13.02c.403 2.284 1.568 4.175 3.36 5.653 1.857 1.533 3.997 2.284 6.438 2.14 1.482-.085 3.132-.284 4.994-1.86.47.234.962.328 1.78.398.629.058 1.235-.031 1.705-.129.735-.155.684-.836.418-.961-2.155-1.004-1.682-.595-2.112-.926 1.095-1.295 2.768-3.598 3.284-6.733.05-.346.115-.834.108-1.114-.004-.171.035-.238.23-.257a4.2 4.2 0 0 0 1.545-.475c1.397-.763 1.96-2.016 2.093-3.517.02-.23-.004-.467-.247-.588M11.58 18.168c-2.088-1.642-3.101-2.183-3.52-2.16-.39.024-.32.472-.234.763.09.288.207.487.371.74.114.167.192.416-.113.603-.673.416-1.842-.14-1.897-.168-1.361-.801-2.5-1.86-3.301-3.306-.775-1.393-1.225-2.888-1.299-4.482-.02-.385.094-.522.477-.592a4.7 4.7 0 0 1 1.53-.038c2.131.311 3.946 1.264 5.467 2.774.868.86 1.525 1.887 2.202 2.89.72 1.066 1.494 2.082 2.48 2.915.348.291.626.513.892.677-.802.09-2.14.109-3.055-.615zm1.001-6.44a.306.306 0 0 1 .415-.287.3.3 0 0 1 .113.074.3.3 0 0 1 .086.214c0 .17-.136.307-.308.307a.303.303 0 0 1-.306-.307m3.11 1.596c-.2.081-.4.151-.591.16a1.25 1.25 0 0 1-.798-.254c-.274-.23-.47-.358-.551-.758a1.7 1.7 0 0 1 .015-.588c.07-.327-.007-.537-.238-.727-.188-.156-.426-.199-.689-.199a.6.6 0 0 1-.254-.078.253.253 0 0 1-.114-.358 1 1 0 0 1 .192-.21c.356-.202.767-.136 1.146.016.352.144.618.408 1.001.782.392.451.462.576.685.915.176.264.336.536.446.848.066.194-.02.353-.25.45"/>
+                </svg>
+              </span>
+              <div class="ai-tab-info">
+                <span class="ai-tab-name">DeepSeek</span>
+                <span class="ai-tab-status-chip" id="tab-status-deepseek">Inactivo</span>
+              </div>
+            </div>
+            <span class="ai-tab-chevron">›</span>
+          </button>
+
+          <button type="button" class="ai-tab-btn" data-provider="meta" role="tab" aria-selected="false" aria-controls="panel-meta">
+            <div class="ai-tab-brand">
+              <span class="ai-brand-badge meta-badge">
+                <svg class="ai-brand-logo" viewBox="0 0 24 24" width="14" height="14" fill="currentColor">
+                  <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm.05 13.91c-1.46 0-2.67-.77-3.48-1.92l-.12-.18-.12.18c-.81 1.15-2.02 1.92-3.48 1.92-2.34 0-4.24-1.88-4.24-4.2s1.9-4.2 4.24-4.2c1.46 0 2.67.77 3.48 1.92l.12.18.12-.18c.81-1.15 2.02-1.92 3.48-1.92 2.34 0 4.24 1.88 4.24 4.2s-1.9 4.2-4.24 4.2zm0-2c1.23 0 2.24-.99 2.24-2.2s-1.01-2.2-2.24-2.2c-.93 0-1.74.57-2.08 1.39-.1.25-.16.52-.16.81s.06.56.16.81c.34.82 1.15 1.39 2.08 1.39zm-6.96 0c1.23 0 2.24-.99 2.24-2.2s-1.01-2.2-2.24-2.2c-.93 0-1.74.57-2.08 1.39-.1.25-.16.52-.16.81s.06.56.16.81c.34.82 1.15 1.39 2.08 1.39z"/>
+                </svg>
+              </span>
+              <div class="ai-tab-info">
+                <span class="ai-tab-name">Meta AI (Llama 3.3)</span>
+                <span class="ai-tab-status-chip" id="tab-status-meta">Inactivo</span>
+              </div>
+            </div>
+            <span class="ai-tab-chevron">›</span>
+          </button>
+
+          <button type="button" class="ai-tab-btn" data-provider="openrouter" role="tab" aria-selected="false" aria-controls="panel-openrouter">
+            <div class="ai-tab-brand">
+              <span class="ai-brand-badge openrouter-badge">
+                <svg class="ai-brand-logo" viewBox="0 0 24 24" width="14" height="14" fill="currentColor">
+                  <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/>
+                </svg>
+              </span>
+              <div class="ai-tab-info">
+                <span class="ai-tab-name">OpenRouter</span>
+                <span class="ai-tab-status-chip" id="tab-status-openrouter">Inactivo</span>
+              </div>
+            </div>
+            <span class="ai-tab-chevron">›</span>
+          </button>
+
+          <button type="button" class="ai-tab-btn" data-provider="cerebras" role="tab" aria-selected="false" aria-controls="panel-cerebras">
+            <div class="ai-tab-brand">
+              <span class="ai-brand-badge cerebras-badge">
+                <svg class="ai-brand-logo" viewBox="0 0 24 24" width="14" height="14" fill="currentColor">
+                  <path d="M11 21h-1l1-7H7.5c-.58 0-.57-.32-.38-.66.19-.34.05-.08.07-.12C8.48 10.94 10.42 7.54 13 3h1l-1 7h3.5c.49 0 .56.33.47.51l-.07.15C14.9 14.52 12.96 17.92 11 21z"/>
+                </svg>
+              </span>
+              <div class="ai-tab-info">
+                <span class="ai-tab-name">Cerebras</span>
+                <span class="ai-tab-status-chip" id="tab-status-cerebras">Inactivo</span>
+              </div>
+            </div>
+            <span class="ai-tab-chevron">›</span>
+          </button>
+        </aside>
+
+        <!-- Contenedor principal de paneles -->
+        <main class="admin-main-panel">
+          <!-- Panel 1: Gemini -->
+          <div class="ai-card ai-provider-panel active" id="panel-gemini" data-provider="gemini" role="tabpanel">
+            <div class="ai-panel-header">
+              <div class="ai-panel-title-wrap">
+                <span class="ai-brand-badge gemini-badge">
+                  <svg class="ai-brand-logo" viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+                    <path d="M11.04 19.32Q12 21.51 12 24q0-2.49.93-4.68.96-2.19 2.58-3.81t3.81-2.55Q21.51 12 24 12q-2.49 0-4.68-.93a12.3 12.3 0 0 1-3.81-2.58 12.3 12.3 0 0 1-2.58-3.81Q12 2.49 12 0q0 2.49-.96 4.68-.93 2.19-2.55 3.81a12.3 12.3 0 0 1-3.81 2.58Q2.49 12 0 12q2.49 0 4.68.96 2.19.93 3.81 2.55t2.55 3.81"/>
+                  </svg>
+                </span>
+                <div>
+                  <h4 class="ai-panel-title">Google Gemini</h4>
+                  <p class="ai-panel-desc">Modelos Flash de última generación con soporte multimodal y tokens gratuitos.</p>
+                </div>
+              </div>
+              <div class="ai-panel-toggle-wrap">
+                <span class="ai-panel-toggle-label">Activar Gemini:</span>
+                <label class="switch-toggle" title="Activar / Desactivar Gemini">
+                  <input type="checkbox" id="ai-toggle-gemini" class="ai-toggle-checkbox">
+                  <span class="slider-round"></span>
+                </label>
+              </div>
+            </div>
+
+            <div class="ai-panel-content">
+              <!-- Cuota Gratuita / Tokens del Sistema -->
+              <div class="free-tier-box" id="free-tier-box-gemini">
+                <div class="free-tier-status-row">
+                  <span class="free-tier-chip">
+                    <svg viewBox="0 0 512 512" width="12" height="12" fill="currentColor" aria-hidden="true">
+                      <path d="M433 179.7L274.1 20.9c-27.9-27.9-73.1-27.9-101 0L14.7 179.3c-19.5 19.5-19.5 51.2 0 70.7l141.4 141.4c19.5 19.5 51.2 19.5 70.7 0L385.7 232.5c27.9-27.9 27.9-73.1 0-101l-14.2-14.2 61.5-61.5c6.2-6.2 16.4-6.2 22.6 0l22.6 22.6c6.2 6.2 6.2 16.4 0 22.6l-45.3 45.3 22.6 22.6 45.3-45.3c18.7-18.7 18.7-49.1 0-67.9L433 179.7zM177.4 340.7L37.3 200.6 195.7 42.2l140.1 140.1L177.4 340.7zM448 384c0-35.3 28.7-64 64-64c-35.3 0-64-28.7-64-64c0 35.3-28.7 64-64 64c35.3 0 64 28.7 64 64zm-192 64c0-26.5 21.5-48 48-48c-26.5 0-48-21.5-48-48c0 26.5-21.5 48-48 48c26.5 0 48 21.5 48 48z"/>
+                    </svg>
+                    Tokens del Sistema
+                  </span>
+                  <span id="free-quota-badge-gemini" class="quota-badge quota-loading" title="Estado de tokens gratuitos">
+                    <span class="quota-dot"></span>
+                    <span id="free-quota-text-gemini">Consultando tokens del sistema...</span>
+                  </span>
+                </div>
+
+                <label class="free-tier-switch-row" for="ai-free-toggle-gemini" title="Activar cuota gratuita sin requerir API Key personal">
+                  <div class="free-tier-text">
+                    <span class="free-tier-title">Usar Cuota Gratuita (Free Tier)</span>
+                    <span class="free-tier-desc">Traducción asistida sin ingresar API Key personal</span>
+                  </div>
+                  <div class="switch-toggle switch-sm">
+                    <input type="checkbox" id="ai-free-toggle-gemini" class="ai-free-checkbox" data-provider="gemini">
+                    <span class="slider-round"></span>
+                  </div>
+                </label>
+              </div>
+
+              <!-- Input API Key -->
+              <div class="form-group" id="api-key-group-gemini">
+                <label for="ai-key-gemini" class="form-label">
+                  <span>API Key: <small id="key-mode-badge-gemini" class="key-mode-badge">(Opcional con cuota gratuita)</small></span>
+                  <a href="https://aistudio.google.com/app/apikey" target="_blank" rel="noopener noreferrer" class="link-get-key">
+                    Obtener clave en Google AI Studio ↗
+                  </a>
+                </label>
+                <div class="input-password-wrapper">
+                  <input type="password" id="ai-key-gemini" class="form-input ai-key-input" placeholder="AIzaSy..." spellcheck="false" autocomplete="off">
+                  <button type="button" class="btn-toggle-visibility" data-target="ai-key-gemini" title="Ver / Ocultar clave">
+                    <svg class="icon-eye" viewBox="0 0 576 512" width="14" height="14" fill="currentColor">
+                      <path d="M288 32c-80.8 0-145.5 36.8-192.6 80.6C48.6 156 17.3 208 2.5 243.7c-3.3 7.9-3.3 16.7 0 24.6C17.3 304 48.6 356 95.4 399.4C142.5 443.2 207.2 480 288 480s145.5-36.8 192.6-80.6c46.8-43.5 78.1-95.4 93-131.1c3.3-7.9 3.3-16.7 0-24.6c-14.8-35.7-46.1-87.7-93-131.1C433.5 68.8 368.8 32 288 32zM144 256a144 144 0 1 1 288 0 144 144 0 1 1 -288 0zm144-64c0 35.3-28.7 64-64 64c-7.1 0-13.9-1.2-20.3-3.3c-5.5-1.8-11.9 1.6-11.7 7.4c.3 6.9 1.3 13.8 3.2 20.7c13.7 51.2 66.4 81.6 117.6 67.9s81.6-66.4 67.9-117.6c-11.1-41.5-47.8-72.8-89.8-78.4c-5.9-.8-10.9 3.8-10.3 9.7c.7 6.4 1.4 12.9 1.4 19.6z"/>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+
+              <!-- Selector de Modelo -->
+              <div class="form-group">
+                <div class="model-label-row">
+                  <label for="ai-model-gemini" class="form-label">Modelo Seleccionado:</label>
+                  <button type="button" class="btn-refresh-models" data-provider="gemini" title="Consultar modelos disponibles en tiempo real">
+                    <span class="refresh-icon">
+                      <svg viewBox="0 0 512 512" width="11" height="11" fill="currentColor">
+                        <path d="M463.5 224H472c13.3 0 24-10.7 24-24V72c0-9.7-5.8-18.5-14.8-22.2s-19.3-1.7-26.2 5.2L413.4 96.6c-87.6-86.5-228.7-86.2-315.8 1c-87.5 87.5-87.5 229.3 0 316.8s229.3 87.5 316.8 0c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0c-62.5 62.5-163.8 62.5-226.3 0s-62.5-163.8 0-226.3c62.2-62.2 162.7-62.5 225.3-1L327 182.6c-6.9 6.9-8.9 17.2-5.2 26.2s12.5 14.8 22.2 14.8H463.5z"/>
+                      </svg>
+                    </span>
+                    Actualizar Lista
+                  </button>
+                </div>
+                <select id="ai-model-gemini" class="form-select ai-model-select">
+                  <option value="" disabled selected>Activa la IA para cargar modelos disponibles...</option>
+                </select>
+              </div>
+
+              <!-- Acciones de Prueba y Diagnóstico -->
+              <div class="ai-panel-actions-card">
+                <div class="ai-test-buttons-row">
+                  <button type="button" class="btn btn-sm btn-outline-primary btn-test-api" data-provider="gemini" title="Verificar validez de la clave y sincronizar modelos disponibles">
+                    <svg viewBox="0 0 512 512" width="12" height="12" fill="currentColor"><path d="M0 256a256 256 0 1 1 512 0A256 256 0 1 1 0 256zM188.3 147.1c-7.6-4.2-16.8-4.1-24.3 .5s-11.9 13.1-11.7 21.8l3.1 116.4c.3 10.4 7.2 19.3 17.1 22.4l112.5 35.2c8.2 2.6 17.2 .3 23-5.8s7.9-15 5.3-23.2l-35.2-112.5c-3.1-9.9-12-16.8-22.4-17.1L188.3 147.1z"/></svg>
+                    Probar Conexión API
+                  </button>
+                  <button type="button" class="btn btn-sm btn-outline-success btn-test-model" data-provider="gemini" title="Enviar prompt rápido de prueba al modelo seleccionado">
+                    <svg viewBox="0 0 512 512" width="12" height="12" fill="currentColor"><path d="M156.6 384.9L125.7 354c-8.5-8.5-11.5-20.8-7.7-32.2c3-8.9 7-20.5 11.8-33.8L24 288c-8.6 0-16.6-4.6-20.9-12.1s-4.2-16.7 .2-24.1l52.5-87.5c21.1-35.2 61.7-53.5 101.9-46l37.2 6.9c13.7-16.9 29.8-32.4 48-46.2L262.5 19.6C266.3 7.8 277.4 0 289.9 0h32.3c13.2 0 24.9 8.6 28.7 21.2l15.5 51.8c23.6 8.3 45.4 20.7 64.6 36.4l49.5-24.8c11.9-6 26.2-3.3 35.1 6.7l22.8 25.7c9.5 10.7 10.6 26.3 2.7 38.2L516.3 194c12.3 21.4 20.9 44.8 25.2 69.5l55.1 11c12.7 2.5 21.8 13.6 21.8 26.5v34.3c0 13.1-9.4 24.3-22.3 26.5l-54.8 9.1c-5.1 24.4-14.7 47.3-28.1 68l27.9 47.9c6.7 11.5 5 26.1-4.1 35.8l-24.2 25.9c-9.6 10.2-25.1 12.6-37.3 5.7l-47.5-26.7c-20.2 13-42.6 22.3-66.5 27.2l-11.5 54c-2.8 13-14.3 22.3-27.6 22.3H352.5c-13.4 0-25-9.5-27.6-22.7l-10.7-53.4c-23.8-5.3-46.1-15-66-28.3l-48.2 27.1c-12 6.8-27.1 4.5-36.6-5.5l-24.2-25.6c-9.4-9.9-10.9-24.8-3.7-36.3l28.6-45.7c-13.1-19.8-22.7-41.8-27.9-65.2z"/></svg>
+                    Probar Modelo
+                  </button>
+                  <button type="button" class="btn-clear-key" data-provider="gemini" title="Borrar credenciales">
+                    <svg viewBox="0 0 448 512" width="11" height="11" fill="currentColor"><path d="M135.2 17.7L128 32H32C14.3 32 0 46.3 0 64S14.3 96 32 96H416c17.7 0 32-14.3 32-32s-14.3-32-32-32H320l-7.2-14.3C307.4 6.8 296.3 0 284.2 0H163.8c-12.1 0-23.2 6.8-28.6 17.7zM416 128H32L53.2 467c1.6 25.3 22.6 45 47.9 45H346.9c25.3 0 46.3-19.7 47.9-45L416 128z"/></svg>
+                    Eliminar
+                  </button>
+                </div>
+                <div class="ai-test-results-row">
+                  <span id="test-status-api-gemini" class="test-pill"></span>
+                  <span id="test-status-model-gemini" class="test-pill"></span>
+                  <span id="test-status-gemini" class="test-status-msg" style="display:none;"></span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Panel 2: Claude -->
+          <div class="ai-card ai-provider-panel" id="panel-claude" data-provider="claude" role="tabpanel">
+            <div class="ai-panel-header">
+              <div class="ai-panel-title-wrap">
+                <span class="ai-brand-badge claude-badge">
+                  <svg class="ai-brand-logo" viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+                    <path fill-rule="evenodd" d="M4.709 15.955l4.72-2.647.08-.23-.08-.128H9.2l-.79-.048-2.698-.073-2.339-.097-2.266-.122-.571-.121L0 11.784l.055-.352.48-.321.686.06 1.52.103 2.278.158 1.652.097 2.449.255h.389l.055-.157-.134-.098-.103-.097-2.358-1.596-2.552-1.688-1.336-.972-.724-.491-.364-.462-.158-1.008.656-.722.881.06.225.061.893.686 1.908 1.476 2.491 1.833.365.304.145-.103.019-.073-.164-.274-1.355-2.446-1.446-2.49-.644-1.032-.17-.619a2.97 2.97 0 01-.104-.729L6.283.134 6.696 0l.996.134.42.364.62 1.414 1.002 2.229 1.555 3.03.456.898.243.832.091.255h.158V9.01l.128-1.706.237-2.095.23-2.695.08-.76.376-.91.747-.492.584.28.48.685-.067.444-.286 1.851-.559 2.903-.364 1.942h.212l.243-.242.985-1.306 1.652-2.064.73-.82.85-.904.547-.431h1.033l.76 1.129-.34 1.166-1.064 1.347-.881 1.142-1.264 1.7-.79 1.36.073.11.188-.02 2.856-.606 1.543-.28 1.841-.315.833.388.091.395-.328.807-1.969.486-2.309.462-3.439.813-.042.03.049.061 1.549.146.662.036h1.622l3.02.225.79.522.474.638-.079.485-1.215.62-1.64-.389-3.829-.91-1.312-.329h-.182v.11l1.093 1.068 2.006 1.81 2.509 2.33.127.578-.322.455-.34-.049-2.205-1.657-.851-.747-1.926-1.62h-.128v.17l.444.649 2.345 3.521.122 1.08-.17.353-.608.213-.668-.122-1.374-1.925-1.415-2.167-1.143-1.943-.14.08-.674 7.254-.316.37-.729.28-.607-.461-.322-.747.322-1.476.389-1.924.315-1.53.286-1.9.17-.632-.012-.042-.14.018-1.434 1.967-2.18 2.945-1.726 1.845-.414.164-.717-.37.067-.662.401-.589 2.388-3.036 1.44-1.882.93-1.086-.006-.158h-.055L4.132 18.56l-1.13.146-.487-.456.061-.746.231-.243 1.908-1.312-.006.006z"/>
+                  </svg>
+                </span>
+                <div>
+                  <h4 class="ai-panel-title">Anthropic Claude</h4>
+                  <p class="ai-panel-desc">Modelos Haiku y Sonnet con alta precisión sintáctica y gramatical.</p>
+                </div>
+              </div>
+              <div class="ai-panel-toggle-wrap">
+                <span class="ai-panel-toggle-label">Activar Claude:</span>
+                <label class="switch-toggle" title="Activar / Desactivar Claude">
+                  <input type="checkbox" id="ai-toggle-claude" class="ai-toggle-checkbox">
+                  <span class="slider-round"></span>
+                </label>
+              </div>
+            </div>
+
+            <div class="ai-panel-content">
+              <div class="form-group" id="api-key-group-claude">
+                <label for="ai-key-claude" class="form-label">
+                  <span>API Key</span>
+                  <a href="https://console.anthropic.com/settings/keys" target="_blank" rel="noopener noreferrer" class="link-get-key">
+                    Obtener clave en Anthropic Console ↗
+                  </a>
+                </label>
+                <div class="input-password-wrapper">
+                  <input type="password" id="ai-key-claude" class="form-input ai-key-input" placeholder="sk-ant-api..." spellcheck="false" autocomplete="off">
+                  <button type="button" class="btn-toggle-visibility" data-target="ai-key-claude" title="Ver / Ocultar clave">
+                    <svg class="icon-eye" viewBox="0 0 576 512" width="14" height="14" fill="currentColor">
+                      <path d="M288 32c-80.8 0-145.5 36.8-192.6 80.6C48.6 156 17.3 208 2.5 243.7c-3.3 7.9-3.3 16.7 0 24.6C17.3 304 48.6 356 95.4 399.4C142.5 443.2 207.2 480 288 480s145.5-36.8 192.6-80.6c46.8-43.5 78.1-95.4 93-131.1c3.3-7.9 3.3-16.7 0-24.6c-14.8-35.7-46.1-87.7-93-131.1C433.5 68.8 368.8 32 288 32zM144 256a144 144 0 1 1 288 0 144 144 0 1 1 -288 0zm144-64c0 35.3-28.7 64-64 64c-7.1 0-13.9-1.2-20.3-3.3c-5.5-1.8-11.9 1.6-11.7 7.4c.3 6.9 1.3 13.8 3.2 20.7c13.7 51.2 66.4 81.6 117.6 67.9s81.6-66.4 67.9-117.6c-11.1-41.5-47.8-72.8-89.8-78.4c-5.9-.8-10.9 3.8-10.3 9.7c.7 6.4 1.4 12.9 1.4 19.6z"/>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <div class="model-label-row">
+                  <label for="ai-model-claude" class="form-label">Modelo Seleccionado:</label>
+                  <button type="button" class="btn-refresh-models" data-provider="claude" title="Consultar modelos disponibles en tiempo real">
+                    <span class="refresh-icon">
+                      <svg viewBox="0 0 512 512" width="11" height="11" fill="currentColor">
+                        <path d="M463.5 224H472c13.3 0 24-10.7 24-24V72c0-9.7-5.8-18.5-14.8-22.2s-19.3-1.7-26.2 5.2L413.4 96.6c-87.6-86.5-228.7-86.2-315.8 1c-87.5 87.5-87.5 229.3 0 316.8s229.3 87.5 316.8 0c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0c-62.5 62.5-163.8 62.5-226.3 0s-62.5-163.8 0-226.3c62.2-62.2 162.7-62.5 225.3-1L327 182.6c-6.9 6.9-8.9 17.2-5.2 26.2s12.5 14.8 22.2 14.8H463.5z"/>
+                      </svg>
+                    </span>
+                    Actualizar Lista
+                  </button>
+                </div>
+                <select id="ai-model-claude" class="form-select ai-model-select">
+                  <option value="" disabled selected>Activa la IA para cargar modelos disponibles...</option>
+                </select>
+              </div>
+
+              <div class="ai-panel-actions-card">
+                <div class="ai-test-buttons-row">
+                  <button type="button" class="btn btn-sm btn-outline-primary btn-test-api" data-provider="claude">
+                    <svg viewBox="0 0 512 512" width="12" height="12" fill="currentColor"><path d="M0 256a256 256 0 1 1 512 0A256 256 0 1 1 0 256zM188.3 147.1c-7.6-4.2-16.8-4.1-24.3 .5s-11.9 13.1-11.7 21.8l3.1 116.4c.3 10.4 7.2 19.3 17.1 22.4l112.5 35.2c8.2 2.6 17.2 .3 23-5.8s7.9-15 5.3-23.2l-35.2-112.5c-3.1-9.9-12-16.8-22.4-17.1L188.3 147.1z"/></svg>
+                    Probar Conexión API
+                  </button>
+                  <button type="button" class="btn btn-sm btn-outline-success btn-test-model" data-provider="claude">
+                    <svg viewBox="0 0 512 512" width="12" height="12" fill="currentColor"><path d="M156.6 384.9L125.7 354c-8.5-8.5-11.5-20.8-7.7-32.2c3-8.9 7-20.5 11.8-33.8L24 288c-8.6 0-16.6-4.6-20.9-12.1s-4.2-16.7 .2-24.1l52.5-87.5c21.1-35.2 61.7-53.5 101.9-46l37.2 6.9c13.7-16.9 29.8-32.4 48-46.2L262.5 19.6C266.3 7.8 277.4 0 289.9 0h32.3c13.2 0 24.9 8.6 28.7 21.2l15.5 51.8c23.6 8.3 45.4 20.7 64.6 36.4l49.5-24.8c11.9-6 26.2-3.3 35.1 6.7l22.8 25.7c9.5 10.7 10.6 26.3 2.7 38.2L516.3 194c12.3 21.4 20.9 44.8 25.2 69.5l55.1 11c12.7 2.5 21.8 13.6 21.8 26.5v34.3c0 13.1-9.4 24.3-22.3 26.5l-54.8 9.1c-5.1 24.4-14.7 47.3-28.1 68l27.9 47.9c6.7 11.5 5 26.1-4.1 35.8l-24.2 25.9c-9.6 10.2-25.1 12.6-37.3 5.7l-47.5-26.7c-20.2 13-42.6 22.3-66.5 27.2l-11.5 54c-2.8 13-14.3 22.3-27.6 22.3H352.5c-13.4 0-25-9.5-27.6-22.7l-10.7-53.4c-23.8-5.3-46.1-15-66-28.3l-48.2 27.1c-12 6.8-27.1 4.5-36.6-5.5l-24.2-25.6c-9.4-9.9-10.9-24.8-3.7-36.3l28.6-45.7c-13.1-19.8-22.7-41.8-27.9-65.2z"/></svg>
+                    Probar Modelo
+                  </button>
+                  <button type="button" class="btn-clear-key" data-provider="claude" title="Borrar credenciales">
+                    <svg viewBox="0 0 448 512" width="11" height="11" fill="currentColor"><path d="M135.2 17.7L128 32H32C14.3 32 0 46.3 0 64S14.3 96 32 96H416c17.7 0 32-14.3 32-32s-14.3-32-32-32H320l-7.2-14.3C307.4 6.8 296.3 0 284.2 0H163.8c-12.1 0-23.2 6.8-28.6 17.7zM416 128H32L53.2 467c1.6 25.3 22.6 45 47.9 45H346.9c25.3 0 46.3-19.7 47.9-45L416 128z"/></svg>
+                    Eliminar
+                  </button>
+                </div>
+                <div class="ai-test-results-row">
+                  <span id="test-status-api-claude" class="test-pill"></span>
+                  <span id="test-status-model-claude" class="test-pill"></span>
+                  <span id="test-status-claude" class="test-status-msg" style="display:none;"></span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Panel 3: ChatGPT -->
+          <div class="ai-card ai-provider-panel" id="panel-chatgpt" data-provider="chatgpt" role="tabpanel">
+            <div class="ai-panel-header">
+              <div class="ai-panel-title-wrap">
+                <span class="ai-brand-badge openai-badge">
+                  <svg class="ai-brand-logo" viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+                    <path d="M22.2819 9.8211a5.9847 5.9847 0 0 0-.5157-4.9108 6.0462 6.0462 0 0 0-6.5098-2.9A6.0651 6.0651 0 0 0 4.9807 4.1818a5.9847 5.9847 0 0 0-3.9977 2.9 6.0462 6.0462 0 0 0 .7427 7.0966 5.98 5.98 0 0 0 .511 4.9107 6.051 6.051 0 0 0 6.5146 2.9001A5.9847 5.9847 0 0 0 13.2599 24a6.0557 6.0557 0 0 0 5.7718-4.2058 5.9894 5.9894 0 0 0 3.9977-2.9001 6.0557 6.0557 0 0 0-.7475-7.0729zm-9.022 12.6081a4.4755 4.4755 0 0 1-2.8764-1.0408l.1419-.0804 4.7783-2.7582a.7948.7948 0 0 0 .3927-.6813v-6.7369l2.02 1.1686a.071.071 0 0 1 .038.052v5.5826a4.504 4.504 0 0 1-4.4945 4.4944zm-9.6607-4.1254a4.4708 4.4708 0 0 1-.5346-3.0137l.142.0852 4.783 2.7582a.7712.7712 0 0 0 .7806 0l5.8428-3.3685v2.3324a.0804.0804 0 0 1-.0332.0615L9.74 19.9502a4.4992 4.4992 0 0 1-6.1408-1.6464zM2.3408 7.8956a4.485 4.485 0 0 1 2.3655-1.9728V11.6a.7664.7664 0 0 0 .3879.6765l5.8144 3.3543-2.0201 1.1685a.0757.0757 0 0 1-.071 0l-4.8303-2.7865A4.504 4.504 0 0 1 2.3408 7.872zm16.5963 3.8558L13.1038 8.364 15.1192 7.2a.0757.0757 0 0 1 .071 0l4.8303 2.7913a4.4944 4.4944 0 0 1-.6765 8.1042v-5.6772a.79.79 0 0 0-.407-.667zm2.0107-3.0231l-.142-.0852-4.7735-2.7818a.7759.7759 0 0 0-.7854 0L9.409 9.2297V6.8974a.0662.0662 0 0 1 .0284-.0615l4.8303-2.7866a4.4992 4.4992 0 0 1 6.6802 4.66zM8.3065 12.863l-2.02-1.1638a.0804.0804 0 0 1-.038-.0567V6.0742a4.4992 4.4992 0 0 1 7.3757-3.4537l-.142.0805L8.704 5.459a.7948.7948 0 0 0-.3927.6813zm1.0976-2.3654l2.602-1.4998 2.6069 1.4998v2.9994l-2.5974 1.4997-2.6067-1.4997Z"/>
+                  </svg>
+                </span>
+                <div>
+                  <h4 class="ai-panel-title">OpenAI (ChatGPT)</h4>
+                  <p class="ai-panel-desc">Modelos GPT-4o mini y GPT-4o reconocidos mundialmente por versatilidad.</p>
+                </div>
+              </div>
+              <div class="ai-panel-toggle-wrap">
+                <span class="ai-panel-toggle-label">Activar ChatGPT:</span>
+                <label class="switch-toggle" title="Activar / Desactivar ChatGPT">
+                  <input type="checkbox" id="ai-toggle-chatgpt" class="ai-toggle-checkbox">
+                  <span class="slider-round"></span>
+                </label>
+              </div>
+            </div>
+
+            <div class="ai-panel-content">
+              <div class="form-group" id="api-key-group-chatgpt">
+                <label for="ai-key-chatgpt" class="form-label">
+                  <span>API Key</span>
+                  <a href="https://platform.openai.com/api-keys" target="_blank" rel="noopener noreferrer" class="link-get-key">
+                    Obtener clave en OpenAI Platform ↗
+                  </a>
+                </label>
+                <div class="input-password-wrapper">
+                  <input type="password" id="ai-key-chatgpt" class="form-input ai-key-input" placeholder="sk-proj-..." spellcheck="false" autocomplete="off">
+                  <button type="button" class="btn-toggle-visibility" data-target="ai-key-chatgpt" title="Ver / Ocultar clave">
+                    <svg class="icon-eye" viewBox="0 0 576 512" width="14" height="14" fill="currentColor">
+                      <path d="M288 32c-80.8 0-145.5 36.8-192.6 80.6C48.6 156 17.3 208 2.5 243.7c-3.3 7.9-3.3 16.7 0 24.6C17.3 304 48.6 356 95.4 399.4C142.5 443.2 207.2 480 288 480s145.5-36.8 192.6-80.6c46.8-43.5 78.1-95.4 93-131.1c3.3-7.9 3.3-16.7 0-24.6c-14.8-35.7-46.1-87.7-93-131.1C433.5 68.8 368.8 32 288 32zM144 256a144 144 0 1 1 288 0 144 144 0 1 1 -288 0zm144-64c0 35.3-28.7 64-64 64c-7.1 0-13.9-1.2-20.3-3.3c-5.5-1.8-11.9 1.6-11.7 7.4c.3 6.9 1.3 13.8 3.2 20.7c13.7 51.2 66.4 81.6 117.6 67.9s81.6-66.4 67.9-117.6c-11.1-41.5-47.8-72.8-89.8-78.4c-5.9-.8-10.9 3.8-10.3 9.7c.7 6.4 1.4 12.9 1.4 19.6z"/>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <div class="model-label-row">
+                  <label for="ai-model-chatgpt" class="form-label">Modelo Seleccionado:</label>
+                  <button type="button" class="btn-refresh-models" data-provider="chatgpt" title="Consultar modelos disponibles en tiempo real">
+                    <span class="refresh-icon">
+                      <svg viewBox="0 0 512 512" width="11" height="11" fill="currentColor">
+                        <path d="M463.5 224H472c13.3 0 24-10.7 24-24V72c0-9.7-5.8-18.5-14.8-22.2s-19.3-1.7-26.2 5.2L413.4 96.6c-87.6-86.5-228.7-86.2-315.8 1c-87.5 87.5-87.5 229.3 0 316.8s229.3 87.5 316.8 0c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0c-62.5 62.5-163.8 62.5-226.3 0s-62.5-163.8 0-226.3c62.2-62.2 162.7-62.5 225.3-1L327 182.6c-6.9 6.9-8.9 17.2-5.2 26.2s12.5 14.8 22.2 14.8H463.5z"/>
+                      </svg>
+                    </span>
+                    Actualizar Lista
+                  </button>
+                </div>
+                <select id="ai-model-chatgpt" class="form-select ai-model-select">
+                  <option value="" disabled selected>Activa la IA para cargar modelos disponibles...</option>
+                </select>
+              </div>
+
+              <div class="ai-panel-actions-card">
+                <div class="ai-test-buttons-row">
+                  <button type="button" class="btn btn-sm btn-outline-primary btn-test-api" data-provider="chatgpt">
+                    <svg viewBox="0 0 512 512" width="12" height="12" fill="currentColor"><path d="M0 256a256 256 0 1 1 512 0A256 256 0 1 1 0 256zM188.3 147.1c-7.6-4.2-16.8-4.1-24.3 .5s-11.9 13.1-11.7 21.8l3.1 116.4c.3 10.4 7.2 19.3 17.1 22.4l112.5 35.2c8.2 2.6 17.2 .3 23-5.8s7.9-15 5.3-23.2l-35.2-112.5c-3.1-9.9-12-16.8-22.4-17.1L188.3 147.1z"/></svg>
+                    Probar Conexión API
+                  </button>
+                  <button type="button" class="btn btn-sm btn-outline-success btn-test-model" data-provider="chatgpt">
+                    <svg viewBox="0 0 512 512" width="12" height="12" fill="currentColor"><path d="M156.6 384.9L125.7 354c-8.5-8.5-11.5-20.8-7.7-32.2c3-8.9 7-20.5 11.8-33.8L24 288c-8.6 0-16.6-4.6-20.9-12.1s-4.2-16.7 .2-24.1l52.5-87.5c21.1-35.2 61.7-53.5 101.9-46l37.2 6.9c13.7-16.9 29.8-32.4 48-46.2L262.5 19.6C266.3 7.8 277.4 0 289.9 0h32.3c13.2 0 24.9 8.6 28.7 21.2l15.5 51.8c23.6 8.3 45.4 20.7 64.6 36.4l49.5-24.8c11.9-6 26.2-3.3 35.1 6.7l22.8 25.7c9.5 10.7 10.6 26.3 2.7 38.2L516.3 194c12.3 21.4 20.9 44.8 25.2 69.5l55.1 11c12.7 2.5 21.8 13.6 21.8 26.5v34.3c0 13.1-9.4 24.3-22.3 26.5l-54.8 9.1c-5.1 24.4-14.7 47.3-28.1 68l27.9 47.9c6.7 11.5 5 26.1-4.1 35.8l-24.2 25.9c-9.6 10.2-25.1 12.6-37.3 5.7l-47.5-26.7c-20.2 13-42.6 22.3-66.5 27.2l-11.5 54c-2.8 13-14.3 22.3-27.6 22.3H352.5c-13.4 0-25-9.5-27.6-22.7l-10.7-53.4c-23.8-5.3-46.1-15-66-28.3l-48.2 27.1c-12 6.8-27.1 4.5-36.6-5.5l-24.2-25.6c-9.4-9.9-10.9-24.8-3.7-36.3l28.6-45.7c-13.1-19.8-22.7-41.8-27.9-65.2z"/></svg>
+                    Probar Modelo
+                  </button>
+                  <button type="button" class="btn-clear-key" data-provider="chatgpt" title="Borrar credenciales">
+                    <svg viewBox="0 0 448 512" width="11" height="11" fill="currentColor"><path d="M135.2 17.7L128 32H32C14.3 32 0 46.3 0 64S14.3 96 32 96H416c17.7 0 32-14.3 32-32s-14.3-32-32-32H320l-7.2-14.3C307.4 6.8 296.3 0 284.2 0H163.8c-12.1 0-23.2 6.8-28.6 17.7zM416 128H32L53.2 467c1.6 25.3 22.6 45 47.9 45H346.9c25.3 0 46.3-19.7 47.9-45L416 128z"/></svg>
+                    Eliminar
+                  </button>
+                </div>
+                <div class="ai-test-results-row">
+                  <span id="test-status-api-chatgpt" class="test-pill"></span>
+                  <span id="test-status-model-chatgpt" class="test-pill"></span>
+                  <span id="test-status-chatgpt" class="test-status-msg" style="display:none;"></span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Panel 4: DeepSeek -->
+          <div class="ai-card ai-provider-panel" id="panel-deepseek" data-provider="deepseek" role="tabpanel">
+            <div class="ai-panel-header">
+              <div class="ai-panel-title-wrap">
+                <span class="ai-brand-badge deepseek-badge">
+                  <svg class="ai-brand-logo" viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+                    <path d="M23.748 4.651c-.254-.124-.364.113-.512.233-.051.04-.094.09-.137.137-.372.397-.806.657-1.373.626-.829-.046-1.537.214-2.163.848-.133-.782-.575-1.248-1.247-1.548-.352-.155-.708-.311-.955-.65-.172-.24-.219-.509-.305-.774-.055-.16-.11-.323-.293-.35-.2-.031-.278.136-.356.276-.313.572-.434 1.202-.422 1.84.027 1.436.633 2.58 1.838 3.393.137.094.172.187.129.323-.082.28-.18.553-.266.833-.055.179-.137.218-.328.14a5.5 5.5 0 0 1-1.737-1.179c-.857-.828-1.631-1.743-2.597-2.46a12 12 0 0 0-.689-.47c-.985-.957.13-1.743.387-1.836.27-.098.094-.433-.778-.428-.872.003-1.67.295-2.687.685a3 3 0 0 1-.465.136 9.6 9.6 0 0 0-2.883-.101c-1.885.21-3.39 1.1-4.497 2.622C.082 8.776-.231 10.854.152 13.02c.403 2.284 1.568 4.175 3.36 5.653 1.857 1.533 3.997 2.284 6.438 2.14 1.482-.085 3.132-.284 4.994-1.86.47.234.962.328 1.78.398.629.058 1.235-.031 1.705-.129.735-.155.684-.836.418-.961-2.155-1.004-1.682-.595-2.112-.926 1.095-1.295 2.768-3.598 3.284-6.733.05-.346.115-.834.108-1.114-.004-.171.035-.238.23-.257a4.2 4.2 0 0 0 1.545-.475c1.397-.763 1.96-2.016 2.093-3.517.02-.23-.004-.467-.247-.588M11.58 18.168c-2.088-1.642-3.101-2.183-3.52-2.16-.39.024-.32.472-.234.763.09.288.207.487.371.74.114.167.192.416-.113.603-.673.416-1.842-.14-1.897-.168-1.361-.801-2.5-1.86-3.301-3.306-.775-1.393-1.225-2.888-1.299-4.482-.02-.385.094-.522.477-.592a4.7 4.7 0 0 1 1.53-.038c2.131.311 3.946 1.264 5.467 2.774.868.86 1.525 1.887 2.202 2.89.72 1.066 1.494 2.082 2.48 2.915.348.291.626.513.892.677-.802.09-2.14.109-3.055-.615zm1.001-6.44a.306.306 0 0 1 .415-.287.3.3 0 0 1 .113.074.3.3 0 0 1 .086.214c0 .17-.136.307-.308.307a.303.303 0 0 1-.306-.307m3.11 1.596c-.2.081-.4.151-.591.16a1.25 1.25 0 0 1-.798-.254c-.274-.23-.47-.358-.551-.758a1.7 1.7 0 0 1 .015-.588c.07-.327-.007-.537-.238-.727-.188-.156-.426-.199-.689-.199a.6.6 0 0 1-.254-.078.253.253 0 0 1-.114-.358 1 1 0 0 1 .192-.21c.356-.202.767-.136 1.146.016.352.144.618.408 1.001.782.392.451.462.576.685.915.176.264.336.536.446.848.066.194-.02.353-.25.45"/>
+                  </svg>
+                </span>
+                <div>
+                  <h4 class="ai-panel-title">DeepSeek</h4>
+                  <p class="ai-panel-desc">Modelos DeepSeek-V3 y DeepSeek-R1 de razonamiento a costo ultra-eficiente.</p>
+                </div>
+              </div>
+              <div class="ai-panel-toggle-wrap">
+                <span class="ai-panel-toggle-label">Activar DeepSeek:</span>
+                <label class="switch-toggle" title="Activar / Desactivar DeepSeek">
+                  <input type="checkbox" id="ai-toggle-deepseek" class="ai-toggle-checkbox">
+                  <span class="slider-round"></span>
+                </label>
+              </div>
+            </div>
+
+            <div class="ai-panel-content">
+              <div class="form-group" id="api-key-group-deepseek">
+                <label for="ai-key-deepseek" class="form-label">
+                  <span>API Key</span>
+                  <a href="https://platform.deepseek.com/api_keys" target="_blank" rel="noopener noreferrer" class="link-get-key">
+                    Obtener clave en DeepSeek Platform ↗
+                  </a>
+                </label>
+                <div class="input-password-wrapper">
+                  <input type="password" id="ai-key-deepseek" class="form-input ai-key-input" placeholder="sk-..." spellcheck="false" autocomplete="off">
+                  <button type="button" class="btn-toggle-visibility" data-target="ai-key-deepseek" title="Ver / Ocultar clave">
+                    <svg class="icon-eye" viewBox="0 0 576 512" width="14" height="14" fill="currentColor">
+                      <path d="M288 32c-80.8 0-145.5 36.8-192.6 80.6C48.6 156 17.3 208 2.5 243.7c-3.3 7.9-3.3 16.7 0 24.6C17.3 304 48.6 356 95.4 399.4C142.5 443.2 207.2 480 288 480s145.5-36.8 192.6-80.6c46.8-43.5 78.1-95.4 93-131.1c3.3-7.9 3.3-16.7 0-24.6c-14.8-35.7-46.1-87.7-93-131.1C433.5 68.8 368.8 32 288 32zM144 256a144 144 0 1 1 288 0 144 144 0 1 1 -288 0zm144-64c0 35.3-28.7 64-64 64c-7.1 0-13.9-1.2-20.3-3.3c-5.5-1.8-11.9 1.6-11.7 7.4c.3 6.9 1.3 13.8 3.2 20.7c13.7 51.2 66.4 81.6 117.6 67.9s81.6-66.4 67.9-117.6c-11.1-41.5-47.8-72.8-89.8-78.4c-5.9-.8-10.9 3.8-10.3 9.7c.7 6.4 1.4 12.9 1.4 19.6z"/>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <div class="model-label-row">
+                  <label for="ai-model-deepseek" class="form-label">Modelo Seleccionado:</label>
+                  <button type="button" class="btn-refresh-models" data-provider="deepseek" title="Consultar modelos disponibles en tiempo real">
+                    <span class="refresh-icon">
+                      <svg viewBox="0 0 512 512" width="11" height="11" fill="currentColor">
+                        <path d="M463.5 224H472c13.3 0 24-10.7 24-24V72c0-9.7-5.8-18.5-14.8-22.2s-19.3-1.7-26.2 5.2L413.4 96.6c-87.6-86.5-228.7-86.2-315.8 1c-87.5 87.5-87.5 229.3 0 316.8s229.3 87.5 316.8 0c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0c-62.5 62.5-163.8 62.5-226.3 0s-62.5-163.8 0-226.3c62.2-62.2 162.7-62.5 225.3-1L327 182.6c-6.9 6.9-8.9 17.2-5.2 26.2s12.5 14.8 22.2 14.8H463.5z"/>
+                      </svg>
+                    </span>
+                    Actualizar Lista
+                  </button>
+                </div>
+                <select id="ai-model-deepseek" class="form-select ai-model-select">
+                  <option value="" disabled selected>Activa la IA para cargar modelos disponibles...</option>
+                </select>
+              </div>
+
+              <div class="ai-panel-actions-card">
+                <div class="ai-test-buttons-row">
+                  <button type="button" class="btn btn-sm btn-outline-primary btn-test-api" data-provider="deepseek">
+                    <svg viewBox="0 0 512 512" width="12" height="12" fill="currentColor"><path d="M0 256a256 256 0 1 1 512 0A256 256 0 1 1 0 256zM188.3 147.1c-7.6-4.2-16.8-4.1-24.3 .5s-11.9 13.1-11.7 21.8l3.1 116.4c.3 10.4 7.2 19.3 17.1 22.4l112.5 35.2c8.2 2.6 17.2 .3 23-5.8s7.9-15 5.3-23.2l-35.2-112.5c-3.1-9.9-12-16.8-22.4-17.1L188.3 147.1z"/></svg>
+                    Probar Conexión API
+                  </button>
+                  <button type="button" class="btn btn-sm btn-outline-success btn-test-model" data-provider="deepseek">
+                    <svg viewBox="0 0 512 512" width="12" height="12" fill="currentColor"><path d="M156.6 384.9L125.7 354c-8.5-8.5-11.5-20.8-7.7-32.2c3-8.9 7-20.5 11.8-33.8L24 288c-8.6 0-16.6-4.6-20.9-12.1s-4.2-16.7 .2-24.1l52.5-87.5c21.1-35.2 61.7-53.5 101.9-46l37.2 6.9c13.7-16.9 29.8-32.4 48-46.2L262.5 19.6C266.3 7.8 277.4 0 289.9 0h32.3c13.2 0 24.9 8.6 28.7 21.2l15.5 51.8c23.6 8.3 45.4 20.7 64.6 36.4l49.5-24.8c11.9-6 26.2-3.3 35.1 6.7l22.8 25.7c9.5 10.7 10.6 26.3 2.7 38.2L516.3 194c12.3 21.4 20.9 44.8 25.2 69.5l55.1 11c12.7 2.5 21.8 13.6 21.8 26.5v34.3c0 13.1-9.4 24.3-22.3 26.5l-54.8 9.1c-5.1 24.4-14.7 47.3-28.1 68l27.9 47.9c6.7 11.5 5 26.1-4.1 35.8l-24.2 25.9c-9.6 10.2-25.1 12.6-37.3 5.7l-47.5-26.7c-20.2 13-42.6 22.3-66.5 27.2l-11.5 54c-2.8 13-14.3 22.3-27.6 22.3H352.5c-13.4 0-25-9.5-27.6-22.7l-10.7-53.4c-23.8-5.3-46.1-15-66-28.3l-48.2 27.1c-12 6.8-27.1 4.5-36.6-5.5l-24.2-25.6c-9.4-9.9-10.9-24.8-3.7-36.3l28.6-45.7c-13.1-19.8-22.7-41.8-27.9-65.2z"/></svg>
+                    Probar Modelo
+                  </button>
+                  <button type="button" class="btn-clear-key" data-provider="deepseek" title="Borrar credenciales">
+                    <svg viewBox="0 0 448 512" width="11" height="11" fill="currentColor"><path d="M135.2 17.7L128 32H32C14.3 32 0 46.3 0 64S14.3 96 32 96H416c17.7 0 32-14.3 32-32s-14.3-32-32-32H320l-7.2-14.3C307.4 6.8 296.3 0 284.2 0H163.8c-12.1 0-23.2 6.8-28.6 17.7zM416 128H32L53.2 467c1.6 25.3 22.6 45 47.9 45H346.9c25.3 0 46.3-19.7 47.9-45L416 128z"/></svg>
+                    Eliminar
+                  </button>
+                </div>
+                <div class="ai-test-results-row">
+                  <span id="test-status-api-deepseek" class="test-pill"></span>
+                  <span id="test-status-model-deepseek" class="test-pill"></span>
+                  <span id="test-status-deepseek" class="test-status-msg" style="display:none;"></span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Panel 5: Meta AI (Llama 3.3 vía Groq) -->
+          <div class="ai-card ai-provider-panel" id="panel-meta" data-provider="meta" role="tabpanel">
+            <div class="ai-panel-header">
+              <div class="ai-panel-title-wrap">
+                <span class="ai-brand-badge meta-badge">
+                  <svg class="ai-brand-logo" viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm.05 13.91c-1.46 0-2.67-.77-3.48-1.92l-.12-.18-.12.18c-.81 1.15-2.02 1.92-3.48 1.92-2.34 0-4.24-1.88-4.24-4.2s1.9-4.2 4.24-4.2c1.46 0 2.67.77 3.48 1.92l.12.18.12-.18c.81-1.15 2.02-1.92 3.48-1.92 2.34 0 4.24 1.88 4.24 4.2s-1.9 4.2-4.24 4.2zm0-2c1.23 0 2.24-.99 2.24-2.2s-1.01-2.2-2.24-2.2c-.93 0-1.74.57-2.08 1.39-.1.25-.16.52-.16.81s.06.56.16.81c.34.82 1.15 1.39 2.08 1.39zm-6.96 0c1.23 0 2.24-.99 2.24-2.2s-1.01-2.2-2.24-2.2c-.93 0-1.74.57-2.08 1.39-.1.25-.16.52-.16.81s.06.56.16.81c.34.82 1.15 1.39 2.08 1.39z"/>
+                  </svg>
+                </span>
+                <div>
+                  <h4 class="ai-panel-title">Meta AI (Llama 3.3 vía Groq)</h4>
+                  <p class="ai-panel-desc">Inferencia de alta velocidad con Llama 3.3 70B y 3.1 8B a costo cero.</p>
+                </div>
+              </div>
+              <div class="ai-panel-toggle-wrap">
+                <span class="ai-panel-toggle-label">Activar Meta AI:</span>
+                <label class="switch-toggle" title="Activar / Desactivar Meta AI">
+                  <input type="checkbox" id="ai-toggle-meta" class="ai-toggle-checkbox">
+                  <span class="slider-round"></span>
+                </label>
+              </div>
+            </div>
+
+            <div class="ai-panel-content">
+              <div class="form-group" id="api-key-group-meta">
+                <label for="ai-key-meta" class="form-label">
+                  <span>API Key <small class="key-mode-badge">(Groq Gratuita)</small></span>
+                  <a href="https://console.groq.com/keys" target="_blank" rel="noopener noreferrer" class="link-get-key">
+                    Obtener clave gratis en Groq Console ↗
+                  </a>
+                </label>
+                <div class="input-password-wrapper">
+                  <input type="password" id="ai-key-meta" class="form-input ai-key-input" placeholder="gsk_..." spellcheck="false" autocomplete="off">
+                  <button type="button" class="btn-toggle-visibility" data-target="ai-key-meta" title="Ver / Ocultar clave">
+                    <svg class="icon-eye" viewBox="0 0 576 512" width="14" height="14" fill="currentColor">
+                      <path d="M288 32c-80.8 0-145.5 36.8-192.6 80.6C48.6 156 17.3 208 2.5 243.7c-3.3 7.9-3.3 16.7 0 24.6C17.3 304 48.6 356 95.4 399.4C142.5 443.2 207.2 480 288 480s145.5-36.8 192.6-80.6c46.8-43.5 78.1-95.4 93-131.1c3.3-7.9 3.3-16.7 0-24.6c-14.8-35.7-46.1-87.7-93-131.1C433.5 68.8 368.8 32 288 32zM144 256a144 144 0 1 1 288 0 144 144 0 1 1 -288 0zm144-64c0 35.3-28.7 64-64 64c-7.1 0-13.9-1.2-20.3-3.3c-5.5-1.8-11.9 1.6-11.7 7.4c.3 6.9 1.3 13.8 3.2 20.7c13.7 51.2 66.4 81.6 117.6 67.9s81.6-66.4 67.9-117.6c-11.1-41.5-47.8-72.8-89.8-78.4c-5.9-.8-10.9 3.8-10.3 9.7c.7 6.4 1.4 12.9 1.4 19.6z"/>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <div class="model-label-row">
+                  <label for="ai-model-meta" class="form-label">Modelo Seleccionado:</label>
+                  <button type="button" class="btn-refresh-models" data-provider="meta" title="Consultar modelos disponibles en tiempo real">
+                    <span class="refresh-icon">
+                      <svg viewBox="0 0 512 512" width="11" height="11" fill="currentColor">
+                        <path d="M463.5 224H472c13.3 0 24-10.7 24-24V72c0-9.7-5.8-18.5-14.8-22.2s-19.3-1.7-26.2 5.2L413.4 96.6c-87.6-86.5-228.7-86.2-315.8 1c-87.5 87.5-87.5 229.3 0 316.8s229.3 87.5 316.8 0c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0c-62.5 62.5-163.8 62.5-226.3 0s-62.5-163.8 0-226.3c62.2-62.2 162.7-62.5 225.3-1L327 182.6c-6.9 6.9-8.9 17.2-5.2 26.2s12.5 14.8 22.2 14.8H463.5z"/>
+                      </svg>
+                    </span>
+                    Actualizar Lista
+                  </button>
+                </div>
+                <select id="ai-model-meta" class="form-select ai-model-select">
+                  <option value="" disabled selected>Activa la IA para cargar modelos disponibles...</option>
+                </select>
+              </div>
+
+              <div class="ai-panel-actions-card">
+                <div class="ai-test-buttons-row">
+                  <button type="button" class="btn btn-sm btn-outline-primary btn-test-api" data-provider="meta">
+                    <svg viewBox="0 0 512 512" width="12" height="12" fill="currentColor"><path d="M0 256a256 256 0 1 1 512 0A256 256 0 1 1 0 256zM188.3 147.1c-7.6-4.2-16.8-4.1-24.3 .5s-11.9 13.1-11.7 21.8l3.1 116.4c.3 10.4 7.2 19.3 17.1 22.4l112.5 35.2c8.2 2.6 17.2 .3 23-5.8s7.9-15 5.3-23.2l-35.2-112.5c-3.1-9.9-12-16.8-22.4-17.1L188.3 147.1z"/></svg>
+                    Probar Conexión API
+                  </button>
+                  <button type="button" class="btn btn-sm btn-outline-success btn-test-model" data-provider="meta">
+                    <svg viewBox="0 0 512 512" width="12" height="12" fill="currentColor"><path d="M156.6 384.9L125.7 354c-8.5-8.5-11.5-20.8-7.7-32.2c3-8.9 7-20.5 11.8-33.8L24 288c-8.6 0-16.6-4.6-20.9-12.1s-4.2-16.7 .2-24.1l52.5-87.5c21.1-35.2 61.7-53.5 101.9-46l37.2 6.9c13.7-16.9 29.8-32.4 48-46.2L262.5 19.6C266.3 7.8 277.4 0 289.9 0h32.3c13.2 0 24.9 8.6 28.7 21.2l15.5 51.8c23.6 8.3 45.4 20.7 64.6 36.4l49.5-24.8c11.9-6 26.2-3.3 35.1 6.7l22.8 25.7c9.5 10.7 10.6 26.3 2.7 38.2L516.3 194c12.3 21.4 20.9 44.8 25.2 69.5l55.1 11c12.7 2.5 21.8 13.6 21.8 26.5v34.3c0 13.1-9.4 24.3-22.3 26.5l-54.8 9.1c-5.1 24.4-14.7 47.3-28.1 68l27.9 47.9c6.7 11.5 5 26.1-4.1 35.8l-24.2 25.9c-9.6 10.2-25.1 12.6-37.3 5.7l-47.5-26.7c-20.2 13-42.6 22.3-66.5 27.2l-11.5 54c-2.8 13-14.3 22.3-27.6 22.3H352.5c-13.4 0-25-9.5-27.6-22.7l-10.7-53.4c-23.8-5.3-46.1-15-66-28.3l-48.2 27.1c-12 6.8-27.1 4.5-36.6-5.5l-24.2-25.6c-9.4-9.9-10.9-24.8-3.7-36.3l28.6-45.7c-13.1-19.8-22.7-41.8-27.9-65.2z"/></svg>
+                    Probar Modelo
+                  </button>
+                  <button type="button" class="btn-clear-key" data-provider="meta" title="Borrar credenciales">
+                    <svg viewBox="0 0 448 512" width="11" height="11" fill="currentColor"><path d="M135.2 17.7L128 32H32C14.3 32 0 46.3 0 64S14.3 96 32 96H416c17.7 0 32-14.3 32-32s-14.3-32-32-32H320l-7.2-14.3C307.4 6.8 296.3 0 284.2 0H163.8c-12.1 0-23.2 6.8-28.6 17.7zM416 128H32L53.2 467c1.6 25.3 22.6 45 47.9 45H346.9c25.3 0 46.3-19.7 47.9-45L416 128z"/></svg>
+                    Eliminar
+                  </button>
+                </div>
+                <div class="ai-test-results-row">
+                  <span id="test-status-api-meta" class="test-pill"></span>
+                  <span id="test-status-model-meta" class="test-pill"></span>
+                  <span id="test-status-meta" class="test-status-msg" style="display:none;"></span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Panel 6: OpenRouter -->
+          <div class="ai-card ai-provider-panel" id="panel-openrouter" data-provider="openrouter" role="tabpanel">
+            <div class="ai-panel-header">
+              <div class="ai-panel-title-wrap">
+                <span class="ai-brand-badge openrouter-badge">
+                  <svg class="ai-brand-logo" viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/>
+                  </svg>
+                </span>
+                <div>
+                  <h4 class="ai-panel-title">OpenRouter</h4>
+                  <p class="ai-panel-desc">Acceso unificado a múltiples modelos de IA (Llama, Gemini, DeepSeek, Claude, GPT) con modelos gratuitos y de pago.</p>
+                </div>
+              </div>
+              <div class="ai-panel-toggle-wrap">
+                <span class="ai-panel-toggle-label">Activar OpenRouter:</span>
+                <label class="switch-toggle" title="Activar / Desactivar OpenRouter">
+                  <input type="checkbox" id="ai-toggle-openrouter" class="ai-toggle-checkbox">
+                  <span class="slider-round"></span>
+                </label>
+              </div>
+            </div>
+
+            <div class="ai-panel-content">
+              <div class="form-group" id="api-key-group-openrouter">
+                <label for="ai-key-openrouter" class="form-label">
+                  <span>API Key</span>
+                  <a href="https://openrouter.ai/settings/keys" target="_blank" rel="noopener noreferrer" class="link-get-key">
+                    Obtener clave en OpenRouter ↗
+                  </a>
+                </label>
+                <div class="input-password-wrapper">
+                  <input type="password" id="ai-key-openrouter" class="form-input ai-key-input" placeholder="sk-or-v1-..." spellcheck="false" autocomplete="off">
+                  <button type="button" class="btn-toggle-visibility" data-target="ai-key-openrouter" title="Ver / Ocultar clave">
+                    <svg class="icon-eye" viewBox="0 0 576 512" width="14" height="14" fill="currentColor">
+                      <path d="M288 32c-80.8 0-145.5 36.8-192.6 80.6C48.6 156 17.3 208 2.5 243.7c-3.3 7.9-3.3 16.7 0 24.6C17.3 304 48.6 356 95.4 399.4C142.5 443.2 207.2 480 288 480s145.5-36.8 192.6-80.6c46.8-43.5 78.1-95.4 93-131.1c3.3-7.9 3.3-16.7 0-24.6c-14.8-35.7-46.1-87.7-93-131.1C433.5 68.8 368.8 32 288 32zM144 256a144 144 0 1 1 288 0 144 144 0 1 1 -288 0zm144-64c0 35.3-28.7 64-64 64c-7.1 0-13.9-1.2-20.3-3.3c-5.5-1.8-11.9 1.6-11.7 7.4c.3 6.9 1.3 13.8 3.2 20.7c13.7 51.2 66.4 81.6 117.6 67.9s81.6-66.4 67.9-117.6c-11.1-41.5-47.8-72.8-89.8-78.4c-5.9-.8-10.9 3.8-10.3 9.7c.7 6.4 1.4 12.9 1.4 19.6z"/>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <div class="model-label-row">
+                  <label for="ai-model-openrouter" class="form-label">Modelo Seleccionado:</label>
+                  <button type="button" class="btn-refresh-models" data-provider="openrouter" title="Consultar modelos disponibles en tiempo real">
+                    <span class="refresh-icon">
+                      <svg viewBox="0 0 512 512" width="11" height="11" fill="currentColor">
+                        <path d="M463.5 224H472c13.3 0 24-10.7 24-24V72c0-9.7-5.8-18.5-14.8-22.2s-19.3-1.7-26.2 5.2L413.4 96.6c-87.6-86.5-228.7-86.2-315.8 1c-87.5 87.5-87.5 229.3 0 316.8s229.3 87.5 316.8 0c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0c-62.5 62.5-163.8 62.5-226.3 0s-62.5-163.8 0-226.3c62.2-62.2 162.7-62.5 225.3-1L327 182.6c-6.9 6.9-8.9 17.2-5.2 26.2s12.5 14.8 22.2 14.8H463.5z"/>
+                      </svg>
+                    </span>
+                    Actualizar Lista
+                  </button>
+                </div>
+                <select id="ai-model-openrouter" class="form-select ai-model-select">
+                  <option value="" disabled selected>Activa la IA para cargar modelos disponibles...</option>
+                </select>
+              </div>
+
+              <div class="ai-panel-actions-card">
+                <div class="ai-test-buttons-row">
+                  <button type="button" class="btn btn-sm btn-outline-primary btn-test-api" data-provider="openrouter">
+                    <svg viewBox="0 0 512 512" width="12" height="12" fill="currentColor"><path d="M0 256a256 256 0 1 1 512 0A256 256 0 1 1 0 256zM188.3 147.1c-7.6-4.2-16.8-4.1-24.3 .5s-11.9 13.1-11.7 21.8l3.1 116.4c.3 10.4 7.2 19.3 17.1 22.4l112.5 35.2c8.2 2.6 17.2 .3 23-5.8s7.9-15 5.3-23.2l-35.2-112.5c-3.1-9.9-12-16.8-22.4-17.1L188.3 147.1z"/></svg>
+                    Probar Conexión API
+                  </button>
+                  <button type="button" class="btn btn-sm btn-outline-success btn-test-model" data-provider="openrouter">
+                    <svg viewBox="0 0 512 512" width="12" height="12" fill="currentColor"><path d="M156.6 384.9L125.7 354c-8.5-8.5-11.5-20.8-7.7-32.2c3-8.9 7-20.5 11.8-33.8L24 288c-8.6 0-16.6-4.6-20.9-12.1s-4.2-16.7 .2-24.1l52.5-87.5c21.1-35.2 61.7-53.5 101.9-46l37.2 6.9c13.7-16.9 29.8-32.4 48-46.2L262.5 19.6C266.3 7.8 277.4 0 289.9 0h32.3c13.2 0 24.9 8.6 28.7 21.2l15.5 51.8c23.6 8.3 45.4 20.7 64.6 36.4l49.5-24.8c11.9-6 26.2-3.3 35.1 6.7l22.8 25.7c9.5 10.7 10.6 26.3 2.7 38.2L516.3 194c12.3 21.4 20.9 44.8 25.2 69.5l55.1 11c12.7 2.5 21.8 13.6 21.8 26.5v34.3c0 13.1-9.4 24.3-22.3 26.5l-54.8 9.1c-5.1 24.4-14.7 47.3-28.1 68l27.9 47.9c6.7 11.5 5 26.1-4.1 35.8l-24.2 25.9c-9.6 10.2-25.1 12.6-37.3 5.7l-47.5-26.7c-20.2 13-42.6 22.3-66.5 27.2l-11.5 54c-2.8 13-14.3 22.3-27.6 22.3H352.5c-13.4 0-25-9.5-27.6-22.7l-10.7-53.4c-23.8-5.3-46.1-15-66-28.3l-48.2 27.1c-12 6.8-27.1 4.5-36.6-5.5l-24.2-25.6c-9.4-9.9-10.9-24.8-3.7-36.3l28.6-45.7c-13.1-19.8-22.7-41.8-27.9-65.2z"/></svg>
+                    Probar Modelo
+                  </button>
+                  <button type="button" class="btn-clear-key" data-provider="openrouter" title="Borrar credenciales">
+                    <svg viewBox="0 0 448 512" width="11" height="11" fill="currentColor"><path d="M135.2 17.7L128 32H32C14.3 32 0 46.3 0 64S14.3 96 32 96H416c17.7 0 32-14.3 32-32s-14.3-32-32-32H320l-7.2-14.3C307.4 6.8 296.3 0 284.2 0H163.8c-12.1 0-23.2 6.8-28.6 17.7zM416 128H32L53.2 467c1.6 25.3 22.6 45 47.9 45H346.9c25.3 0 46.3-19.7 47.9-45L416 128z"/></svg>
+                    Eliminar
+                  </button>
+                </div>
+                <div class="ai-test-results-row">
+                  <span id="test-status-api-openrouter" class="test-pill"></span>
+                  <span id="test-status-model-openrouter" class="test-pill"></span>
+                  <span id="test-status-openrouter" class="test-status-msg" style="display:none;"></span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Panel 7: Cerebras -->
+          <div class="ai-card ai-provider-panel" id="panel-cerebras" data-provider="cerebras" role="tabpanel">
+            <div class="ai-panel-header">
+              <div class="ai-panel-title-wrap">
+                <span class="ai-brand-badge cerebras-badge">
+                  <svg class="ai-brand-logo" viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+                    <path d="M11 21h-1l1-7H7.5c-.58 0-.57-.32-.38-.66.19-.34.05-.08.07-.12C8.48 10.94 10.42 7.54 13 3h1l-1 7h3.5c.49 0 .56.33.47.51l-.07.15C14.9 14.52 12.96 17.92 11 21z"/>
+                  </svg>
+                </span>
+                <div>
+                  <h4 class="ai-panel-title">Cerebras</h4>
+                  <p class="ai-panel-desc">La inferencia más rápida del mundo para Llama 3.3 (70B) y 3.1 (8B) impulsada por supercomputación CS-3.</p>
+                </div>
+              </div>
+              <div class="ai-panel-toggle-wrap">
+                <span class="ai-panel-toggle-label">Activar Cerebras:</span>
+                <label class="switch-toggle" title="Activar / Desactivar Cerebras">
+                  <input type="checkbox" id="ai-toggle-cerebras" class="ai-toggle-checkbox">
+                  <span class="slider-round"></span>
+                </label>
+              </div>
+            </div>
+
+            <div class="ai-panel-content">
+              <div class="form-group" id="api-key-group-cerebras">
+                <label for="ai-key-cerebras" class="form-label">
+                  <span>API Key</span>
+                  <a href="https://cloud.cerebras.ai/" target="_blank" rel="noopener noreferrer" class="link-get-key">
+                    Obtener clave en Cerebras Cloud ↗
+                  </a>
+                </label>
+                <div class="input-password-wrapper">
+                  <input type="password" id="ai-key-cerebras" class="form-input ai-key-input" placeholder="csk-..." spellcheck="false" autocomplete="off">
+                  <button type="button" class="btn-toggle-visibility" data-target="ai-key-cerebras" title="Ver / Ocultar clave">
+                    <svg class="icon-eye" viewBox="0 0 576 512" width="14" height="14" fill="currentColor">
+                      <path d="M288 32c-80.8 0-145.5 36.8-192.6 80.6C48.6 156 17.3 208 2.5 243.7c-3.3 7.9-3.3 16.7 0 24.6C17.3 304 48.6 356 95.4 399.4C142.5 443.2 207.2 480 288 480s145.5-36.8 192.6-80.6c46.8-43.5 78.1-95.4 93-131.1c3.3-7.9 3.3-16.7 0-24.6c-14.8-35.7-46.1-87.7-93-131.1C433.5 68.8 368.8 32 288 32zM144 256a144 144 0 1 1 288 0 144 144 0 1 1 -288 0zm144-64c0 35.3-28.7 64-64 64c-7.1 0-13.9-1.2-20.3-3.3c-5.5-1.8-11.9 1.6-11.7 7.4c.3 6.9 1.3 13.8 3.2 20.7c13.7 51.2 66.4 81.6 117.6 67.9s81.6-66.4 67.9-117.6c-11.1-41.5-47.8-72.8-89.8-78.4c-5.9-.8-10.9 3.8-10.3 9.7c.7 6.4 1.4 12.9 1.4 19.6z"/>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <div class="model-label-row">
+                  <label for="ai-model-cerebras" class="form-label">Modelo Seleccionado:</label>
+                  <button type="button" class="btn-refresh-models" data-provider="cerebras" title="Consultar modelos disponibles en tiempo real">
+                    <span class="refresh-icon">
+                      <svg viewBox="0 0 512 512" width="11" height="11" fill="currentColor">
+                        <path d="M463.5 224H472c13.3 0 24-10.7 24-24V72c0-9.7-5.8-18.5-14.8-22.2s-19.3-1.7-26.2 5.2L413.4 96.6c-87.6-86.5-228.7-86.2-315.8 1c-87.5 87.5-87.5 229.3 0 316.8s229.3 87.5 316.8 0c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0c-62.5 62.5-163.8 62.5-226.3 0s-62.5-163.8 0-226.3c62.2-62.2 162.7-62.5 225.3-1L327 182.6c-6.9 6.9-8.9 17.2-5.2 26.2s12.5 14.8 22.2 14.8H463.5z"/>
+                      </svg>
+                    </span>
+                    Actualizar Lista
+                  </button>
+                </div>
+                <select id="ai-model-cerebras" class="form-select ai-model-select">
+                  <option value="" disabled selected>Activa la IA para cargar modelos disponibles...</option>
+                </select>
+              </div>
+
+              <div class="ai-panel-actions-card">
+                <div class="ai-test-buttons-row">
+                  <button type="button" class="btn btn-sm btn-outline-primary btn-test-api" data-provider="cerebras">
+                    <svg viewBox="0 0 512 512" width="12" height="12" fill="currentColor"><path d="M0 256a256 256 0 1 1 512 0A256 256 0 1 1 0 256zM188.3 147.1c-7.6-4.2-16.8-4.1-24.3 .5s-11.9 13.1-11.7 21.8l3.1 116.4c.3 10.4 7.2 19.3 17.1 22.4l112.5 35.2c8.2 2.6 17.2 .3 23-5.8s7.9-15 5.3-23.2l-35.2-112.5c-3.1-9.9-12-16.8-22.4-17.1L188.3 147.1z"/></svg>
+                    Probar Conexión API
+                  </button>
+                  <button type="button" class="btn btn-sm btn-outline-success btn-test-model" data-provider="cerebras">
+                    <svg viewBox="0 0 512 512" width="12" height="12" fill="currentColor"><path d="M156.6 384.9L125.7 354c-8.5-8.5-11.5-20.8-7.7-32.2c3-8.9 7-20.5 11.8-33.8L24 288c-8.6 0-16.6-4.6-20.9-12.1s-4.2-16.7 .2-24.1l52.5-87.5c21.1-35.2 61.7-53.5 101.9-46l37.2 6.9c13.7-16.9 29.8-32.4 48-46.2L262.5 19.6C266.3 7.8 277.4 0 289.9 0h32.3c13.2 0 24.9 8.6 28.7 21.2l15.5 51.8c23.6 8.3 45.4 20.7 64.6 36.4l49.5-24.8c11.9-6 26.2-3.3 35.1 6.7l22.8 25.7c9.5 10.7 10.6 26.3 2.7 38.2L516.3 194c12.3 21.4 20.9 44.8 25.2 69.5l55.1 11c12.7 2.5 21.8 13.6 21.8 26.5v34.3c0 13.1-9.4 24.3-22.3 26.5l-54.8 9.1c-5.1 24.4-14.7 47.3-28.1 68l27.9 47.9c6.7 11.5 5 26.1-4.1 35.8l-24.2 25.9c-9.6 10.2-25.1 12.6-37.3 5.7l-47.5-26.7c-20.2 13-42.6 22.3-66.5 27.2l-11.5 54c-2.8 13-14.3 22.3-27.6 22.3H352.5c-13.4 0-25-9.5-27.6-22.7l-10.7-53.4c-23.8-5.3-46.1-15-66-28.3l-48.2 27.1c-12 6.8-27.1 4.5-36.6-5.5l-24.2-25.6c-9.4-9.9-10.9-24.8-3.7-36.3l28.6-45.7c-13.1-19.8-22.7-41.8-27.9-65.2z"/></svg>
+                    Probar Modelo
+                  </button>
+                  <button type="button" class="btn-clear-key" data-provider="cerebras" title="Borrar credenciales">
+                    <svg viewBox="0 0 448 512" width="11" height="11" fill="currentColor"><path d="M135.2 17.7L128 32H32C14.3 32 0 46.3 0 64S14.3 96 32 96H416c17.7 0 32-14.3 32-32s-14.3-32-32-32H320l-7.2-14.3C307.4 6.8 296.3 0 284.2 0H163.8c-12.1 0-23.2 6.8-28.6 17.7zM416 128H32L53.2 467c1.6 25.3 22.6 45 47.9 45H346.9c25.3 0 46.3-19.7 47.9-45L416 128z"/></svg>
+                    Eliminar
+                  </button>
+                </div>
+                <div class="ai-test-results-row">
+                  <span id="test-status-api-cerebras" class="test-pill"></span>
+                  <span id="test-status-model-cerebras" class="test-pill"></span>
+                  <span id="test-status-cerebras" class="test-status-msg" style="display:none;"></span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </main>
+      </div>
+
+      <div class="modal-footer admin-footer">
+        <div class="admin-footer-tip">
+          <svg viewBox="0 0 512 512" width="13" height="13" fill="currentColor">
+            <path d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM216 336h24V272H216c-13.3 0-24-10.7-24-24s10.7-24 24-24h48c13.3 0 24 10.7 24 24v88h8c13.3 0 24 10.7 24 24s-10.7 24-24 24H216c-13.3 0-24-10.7-24-24s10.7-24 24-24zm40-208a32 32 0 1 1 0 64 32 32 0 1 1 0-64z"/>
+          </svg>
+          <span>Guarda los cambios para aplicar la configuración al traductor</span>
+        </div>
+        <div class="admin-footer-actions">
+          <button id="admin-cancel-btn" class="btn btn-secondary" type="button">Cerrar</button>
+          <button id="admin-save-btn" class="btn btn-primary btn-save-admin" type="button">
+            <svg viewBox="0 0 448 512" width="13" height="13" fill="currentColor" style="vertical-align: -1px; margin-right: 3px;">
+              <path d="M438.6 105.4c12.5 12.5 12.5 32.8 0 45.3l-256 256c-12.5 12.5-32.8 12.5-45.3 0l-128-128c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0L160 338.7 393.4 105.4c12.5-12.5 32.8-12.5 45.3 0z"/>
+            </svg>
+            Guardar Configuración
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <div class="app-layout">
     <!-- Encabezado -->
     <header class="app-header">
       <div class="header-brand">
         <div class="brand-icon">
-          <svg viewBox="0 0 24 24" width="28" height="28" fill="currentColor">
-            <path d="M12.87 15.07l-2.54-2.51.03-.08A19.4 19.4 0 0013.2 6H16V4H9V2H7v2H0v2h11.17C10.5 7.92 9.4 10.1 8.2 12c-.75-.82-1.39-1.8-1.9-2.9l-1.8.8c.6 1.4 1.4 2.6 2.3 3.7l-4.5 4.5 1.4 1.4 4.5-4.5 2.8 2.8.9-2.7zM18.5 10h-2L12 22h2l1.12-3h4.75L21 22h2l-4.5-12zm-2.62 7l1.62-4.33L19.12 17h-3.24z"/>
+          <svg viewBox="0 0 640 512" width="26" height="26" fill="currentColor">
+            <path d="M152.1 236.2c-3.5-12.1-7.8-24.3-13-36.2l-1.3 4.2c-5.8 18.5-12.8 36.6-21.2 54.1l35.5-22.1zm88.5 76.9c-16.4-31-31.4-65.7-44.8-103.5l1.8-6.1c11.4-38.3 19.3-78.6 23.3-120.3L256 83.2H128V32H80v51.2H0v48h160.8c-3.7 34.6-10.4 67.9-19.8 99.4-10.2-24.9-18.5-51.4-24.7-79.4H68.8c6.6 34.2 16.8 66.8 30.3 97.4-23.7 34.7-53.7 65.5-89.1 91.2l31.5 36.8c42.8-30.8 78.8-68.1 106.8-110.5 20.2 44.9 44.7 86.8 72.8 124.7l39.5-32.9zm135.4-89.9l-64 160h46.2l13.1-34.9h67.4l13.1 34.9H500l-64-160h-60zm10.7 89.1l20.4-54.4 20.4 54.4h-40.8zM576 32H352c-17.7 0-32 14.3-32 32v96h48V80h192v288h-64v48h64c17.7 0 32-14.3 32-32V64c0-17.7-14.3-32-32-32z"/>
           </svg>
         </div>
         <div>
-          <h1 class="brand-title">Traductor Local</h1>
-          <p class="brand-subtitle">Impulsado por LibreTranslate • Un desarrollo de merke.net</p>
+          <h1 id="main-brand-title" class="brand-title">Traductor Local</h1>
+          <p id="main-brand-subtitle" class="brand-subtitle">Impulsado por LibreTranslate • Un desarrollo de merke.net</p>
         </div>
       </div>
 
       <div class="header-actions">
-        <button id="theme-toggle-btn" class="btn-theme-toggle" title="Cambiar tema (claro / oscuro)" aria-label="Cambiar tema">
-          <svg id="theme-icon-sun" class="theme-icon hidden" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="12" cy="12" r="5"></circle>
-            <line x1="12" y1="1" x2="12" y2="3"></line>
-            <line x1="12" y1="21" x2="12" y2="23"></line>
-            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
-            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
-            <line x1="1" y1="12" x2="3" y2="12"></line>
-            <line x1="21" y1="12" x2="23" y2="12"></line>
-            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
-            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+        <!-- Botón de Configuración Administrativa de IAs (Ubicación 1) -->
+        <button id="admin-settings-btn" class="btn-theme-toggle btn-admin-settings" title="Configuración de IAs (Gemini, Claude, ChatGPT, DeepSeek)" aria-label="Configuración de IAs" type="button">
+          <svg viewBox="0 0 512 512" width="18" height="18" fill="currentColor">
+            <path d="M495.9 166.6c3.2 8.7 .5 18.4-6.4 24.6l-43.3 39.4c1.1 8.3 1.7 16.8 1.7 25.4s-.6 17.1-1.7 25.4l43.3 39.4c6.9 6.2 9.6 15.9 6.4 24.6-4.4 11.9-9.7 23.3-15.8 34.3l-4.7 8.1c-6.6 11-14 21.4-22.1 31.2-5.9 7.2-15.7 10.7-25 8.7l-56.8-12.1c-12 10.2-25.5 18.7-40.2 25.1l-10.7 57.4c-1.8 9.5-9.2 17-18.8 18.8-12.5 2.4-25.3 3.6-38.3 3.6s-25.8-1.2-38.3-3.6c-9.6-1.8-17-9.3-18.8-18.8l-10.7-57.4c-14.7-6.4-28.2-14.9-40.2-25.1l-56.8 12.1c-9.3 2-19.1-1.5-25-8.7-8.1-9.8-15.5-20.2-22.1-31.2l-4.7-8.1c-6.1-11-11.4-22.4-15.8-34.3-3.2-8.7-.5-18.4 6.4-24.6l43.3-39.4c-1.1-8.4-1.7-16.9-1.7-25.5s.6-17.1 1.7-25.4l-43.3-39.4c-6.9-6.2-9.6-15.9-6.4-24.6 4.4-11.9 9.7-23.3 15.8-34.3l4.7-8.1c6.6-11 14-21.4 22.1-31.2 5.9-7.2 15.7-10.7 25-8.7l56.8 12.1c12-10.2 25.5-18.7 40.2-25.1l10.7-57.4c1.8-9.5 9.2-17 18.8-18.8 12.5-2.4 25.3-3.6 38.3-3.6s25.8 1.2 38.3 3.6c9.6 1.8 17 9.3 18.8 18.8l10.7 57.4c14.7 6.4 28.2 14.9 40.2 25.1l56.8-12.1c9.3-2 19.1 1.5 25 8.7 8.1 9.8 15.5 20.2 22.1 31.2l4.7 8.1c6.1 11 11.4 22.4 15.8 34.3zM256 336a80 80 0 1 0 0-160 80 80 0 1 0 0 160z"/>
           </svg>
-          <svg id="theme-icon-moon" class="theme-icon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+          <span id="ai-active-indicator-dot" class="badge-dot-ai hidden" title="IA activa configurada"></span>
+        </button>
+
+        <!-- Selector de Tema (Claro / Oscuro) -->
+        <button id="theme-toggle-btn" class="btn-theme-toggle" title="Cambiar tema (claro / oscuro)" aria-label="Cambiar tema" type="button">
+          <svg id="theme-icon-sun" class="theme-icon hidden" viewBox="0 0 512 512" width="18" height="18" fill="currentColor">
+            <path d="M361.5 1.2c5 2.1 8.6 6.6 9.6 11.9L391 121l107.9 19.8c5.3 1 9.8 4.6 11.9 9.6s1.5 10.7-1.6 15.2L446.9 256l62.3 90.3c3.1 4.5 3.7 10.2 1.6 15.2s-6.6 8.6-11.9 9.6L391 391 371.1 498.9c-1 5.3-4.6 9.8-9.6 11.9s-10.7 1.5-15.2-1.6L256 446.9l-90.3 62.3c-4.5 3.1-10.2 3.7-15.2 1.6s-8.6-6.6-9.6-11.9L121 391 13.1 371.1c-5.3-1-9.8-4.6-11.9-9.6s-1.5-10.7 1.6-15.2L65.1 256 2.8 165.7c-3.1-4.5-3.7-10.2-1.6-15.2s6.6-8.6 11.9-9.6L121 121 140.9 13.1c1-5.3 4.6-9.8 9.6-11.9s10.7-1.5 15.2 1.6L256 65.1 346.3 2.8c4.5-3.1 10.2-3.7 15.2-1.6zM160 256a96 96 0 1 0 192 0 96 96 0 1 0 -192 0zm224 0a128 128 0 1 1 -256 0 128 128 0 1 1 256 0z"/>
+          </svg>
+          <svg id="theme-icon-moon" class="theme-icon" viewBox="0 0 384 512" width="18" height="18" fill="currentColor">
+            <path d="M223.5 32C100 32 0 132.3 0 256S100 480 223.5 480c60.6 0 115.5-24.2 155.8-63.4 5-4.9 6.3-12.5 3.1-18.7s-10.1-9.7-17-8.5c-9.8 1.7-19.8 2.6-30.1 2.6-96.9 0-175.5-78.8-175.5-176 0-65.8 36-123.1 89.3-153.3 6.1-3.5 9.2-10.5 7.7-17.3s-7.3-11.9-14.3-12.5c-6.3-.5-12.6-.8-19-.8z"/>
           </svg>
         </button>
 
@@ -82,55 +846,89 @@
 
     <!-- Contenido Principal -->
     <main class="translator-container">
-      <!-- Selector de Modo: Traducir Texto vs Traducir Archivos -->
+      <!-- Selector de Modo: Traducir Texto vs Traducir Archivos vs Generar Prompt -->
       <div class="tabs-nav">
         <button id="tab-text-btn" class="tab-btn active" type="button">
-          <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
-            <path d="M12.87 15.07l-2.54-2.51.03-.08A19.4 19.4 0 0013.2 6H16V4H9V2H7v2H0v2h11.17C10.5 7.92 9.4 10.1 8.2 12c-.75-.82-1.39-1.8-1.9-2.9l-1.8.8c.6 1.4 1.4 2.6 2.3 3.7l-4.5 4.5 1.4 1.4 4.5-4.5 2.8 2.8.9-2.7zM18.5 10h-2L12 22h2l1.12-3h4.75L21 22h2l-4.5-12zm-2.62 7l1.62-4.33L19.12 17h-3.24z"/>
+          <svg viewBox="0 0 640 512" width="17" height="17" fill="currentColor">
+            <path d="M152.1 236.2c-3.5-12.1-7.8-24.3-13-36.2l-1.3 4.2c-5.8 18.5-12.8 36.6-21.2 54.1l35.5-22.1zm88.5 76.9c-16.4-31-31.4-65.7-44.8-103.5l1.8-6.1c11.4-38.3 19.3-78.6 23.3-120.3L256 83.2H128V32H80v51.2H0v48h160.8c-3.7 34.6-10.4 67.9-19.8 99.4-10.2-24.9-18.5-51.4-24.7-79.4H68.8c6.6 34.2 16.8 66.8 30.3 97.4-23.7 34.7-53.7 65.5-89.1 91.2l31.5 36.8c42.8-30.8 78.8-68.1 106.8-110.5 20.2 44.9 44.7 86.8 72.8 124.7l39.5-32.9zm135.4-89.9l-64 160h46.2l13.1-34.9h67.4l13.1 34.9H500l-64-160h-60zm10.7 89.1l20.4-54.4 20.4 54.4h-40.8zM576 32H352c-17.7 0-32 14.3-32 32v96h48V80h192v288h-64v48h64c17.7 0 32-14.3 32-32V64c0-17.7-14.3-32-32-32z"/>
           </svg>
           TRADUCIR TEXTO
         </button>
         <button id="tab-file-btn" class="tab-btn" type="button">
-          <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
-            <path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/>
+          <svg viewBox="0 0 384 512" width="15" height="15" fill="currentColor">
+            <path d="M64 0C28.7 0 0 28.7 0 64V448c0 35.3 28.7 64 64 64H320c35.3 0 64-28.7 64-64V160H256c-17.7 0-32-14.3-32-32V0H64zM256 0V128H384L256 0zM112 256H272c8.8 0 16 7.2 16 16s-7.2 16-16 16H112c-8.8 0-16-7.2-16-16s7.2-16 16-16zm0 64H272c8.8 0 16 7.2 16 16s-7.2 16-16 16H112c-8.8 0-16-7.2-16-16s7.2-16 16-16zm0 64H208c8.8 0 16 7.2 16 16s-7.2 16-16 16H112c-8.8 0-16-7.2-16-16s7.2-16 16-16z"/>
           </svg>
           TRADUCIR ARCHIVOS
         </button>
+        <!-- Interruptor / Opción de Generar Prompt disponible solo con IA activa -->
+        <button id="tab-prompt-btn" class="tab-btn prompt-tab-btn hidden" type="button" title="Modo Generar Prompt: traduce requerimientos y genera un prompt perfeccionado en inglés optimizado para asistentes de código">
+          <svg viewBox="0 0 512 512" width="14" height="14" fill="currentColor">
+            <path d="M433 179.7L274.1 20.9c-27.9-27.9-73.1-27.9-101 0L14.7 179.3c-19.5 19.5-19.5 51.2 0 70.7l141.4 141.4c19.5 19.5 51.2 19.5 70.7 0L385.7 232.5c27.9-27.9 27.9-73.1 0-101l-14.2-14.2 61.5-61.5c6.2-6.2 16.4-6.2 22.6 0l22.6 22.6c6.2 6.2 6.2 16.4 0 22.6l-45.3 45.3 22.6 22.6 45.3-45.3c18.7-18.7 18.7-49.1 0-67.9L433 179.7zM177.4 340.7L37.3 200.6 195.7 42.2l140.1 140.1L177.4 340.7zM448 384c0-35.3 28.7-64 64-64c-35.3 0-64-28.7-64-64c0 35.3-28.7 64-64 64c35.3 0 64 28.7 64 64zm-192 64c0-26.5 21.5-48 48-48c-26.5 0-48-21.5-48-48c0 26.5-21.5 48-48 48c26.5 0 48 21.5 48 48z"/>
+          </svg>
+          <span>GENERAR PROMPT (IA)</span>
+        </button>
       </div>
 
-      <!-- Barra superior de selección de idiomas -->
-      <section class="language-bar">
-        <!-- Selector Origen -->
-        <div class="lang-selector-group">
-          <label for="source-lang-select" class="lang-label">Origen:</label>
-          <select id="source-lang-select" class="lang-select">
-            <option value="auto" selected>Auto-detectar idioma</option>
-            <option value="en">Inglés (English)</option>
-            <option value="es">Español</option>
-          </select>
-          <span id="detected-badge" class="detected-badge hidden" title="Idioma detectado">
-            Detectado: <strong id="detected-lang-name">Inglés</strong>
-          </span>
+      <!-- Barra superior de selección de idiomas y controles de IA -->
+      <section class="language-bar" aria-label="Controles de traducción e idioma">
+        <!-- Grupo Principal de Idiomas: Origen ⇄ Destino -->
+        <div class="lang-bar-pipeline">
+          <!-- 1. Selector de Origen -->
+          <div class="lang-selector-group lang-source-group">
+            <div class="lang-label-wrap">
+              <label for="source-lang-select" class="lang-label">Origen:</label>
+              <span id="detected-badge" class="detected-badge hidden" title="Idioma detectado automáticamente">
+                Detectado: <strong id="detected-lang-name">Inglés</strong>
+              </span>
+            </div>
+            <select id="source-lang-select" class="lang-select" aria-label="Seleccionar idioma de origen">
+              <option value="auto" selected>Auto-detectar idioma</option>
+              <option value="en">Inglés (English)</option>
+              <option value="es">Español</option>
+            </select>
+          </div>
+
+          <!-- 2. Control de Acción: Intercambiar Idiomas (Swap) -->
+          <div class="lang-swap-action">
+            <button id="swap-lang-btn" class="btn-swap" type="button" title="Intercambiar idiomas origen y destino" aria-label="Intercambiar idiomas">
+              <svg viewBox="0 0 512 512" width="16" height="16" fill="currentColor" aria-hidden="true">
+                <path d="M32 96l320 0V32c0-12.9 7.8-24.6 19.8-29.6s25.7-2.2 34.9 6.9l96 96c6.2 6.2 9.8 14.7 9.8 23.6s-3.5 17.4-9.8 23.6l-96 96c-9.2 9.2-22.9 11.9-34.9 6.9s-19.8-16.6-19.8-29.6V160L32 160c-17.7 0-32-14.3-32-32s14.3-32 32-32zm448 320L160 416v64c0 12.9-7.8 24.6-19.8 29.6s-25.7 2.2-34.9-6.9l-96-96c-6.2-6.2-9.8-14.7-9.8-23.6s3.5-17.4 9.8-23.6l96-96c9.2-9.2 22.9-11.9 34.9-6.9s19.8 16.6 19.8 29.6l0 64 320 0c17.7 0 32 14.3 32 32s-14.3 32-32 32z"/>
+              </svg>
+            </button>
+          </div>
+
+          <!-- 3. Selector de Destino -->
+          <div class="lang-selector-group lang-target-group">
+            <div class="lang-label-wrap">
+              <label for="target-lang-select" class="lang-label">Destino:</label>
+              <span id="auto-mode-hint" class="mode-hint" title="Lógica inteligente: detecta dirección automáticamente">
+                (Auto: EN ⇄ ES)
+              </span>
+            </div>
+            <select id="target-lang-select" class="lang-select" aria-label="Seleccionar idioma de destino">
+              <option value="smart_auto" selected>✨ Automático (EN ⇄ ES)</option>
+              <option value="es">Español</option>
+              <option value="en">Inglés (English)</option>
+            </select>
+          </div>
         </div>
 
-        <!-- Botón Intercambiar (Swap) -->
-        <button id="swap-lang-btn" class="btn-swap" title="Intercambiar idiomas" aria-label="Intercambiar idiomas">
-          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M7 16l-4-4m0 0l4-4m-4 4h18m-4 4l4 4m0 0l-4 4m4-4H3"></path>
-          </svg>
-        </button>
-
-        <!-- Selector Destino -->
-        <div class="lang-selector-group">
-          <label for="target-lang-select" class="lang-label">Destino:</label>
-          <select id="target-lang-select" class="lang-select">
-            <option value="smart_auto" selected>✨ Automático (EN ⇄ ES)</option>
-            <option value="es">Español</option>
-            <option value="en">Inglés (English)</option>
+        <!-- 4. Selector / Toggle de Modelo de IA (Visible solo si hay al menos una IA activa) -->
+        <div id="ai-selector-container" class="lang-selector-group ai-selector-group hidden">
+          <div class="ai-label-wrap">
+            <label for="active-ai-select" class="lang-label ai-label">
+              <span class="ai-sparkle" aria-hidden="true">
+                <svg viewBox="0 0 512 512" width="13" height="13" fill="currentColor">
+                  <path d="M433 179.7L274.1 20.9c-27.9-27.9-73.1-27.9-101 0L14.7 179.3c-19.5 19.5-19.5 51.2 0 70.7l141.4 141.4c19.5 19.5 51.2 19.5 70.7 0L385.7 232.5c27.9-27.9 27.9-73.1 0-101l-14.2-14.2 61.5-61.5c6.2-6.2 16.4-6.2 22.6 0l22.6 22.6c6.2 6.2 6.2 16.4 0 22.6l-45.3 45.3 22.6 22.6 45.3-45.3c18.7-18.7 18.7-49.1 0-67.9L433 179.7zM177.4 340.7L37.3 200.6 195.7 42.2l140.1 140.1L177.4 340.7zM448 384c0-35.3 28.7-64 64-64c-35.3 0-64-28.7-64-64c0 35.3-28.7 64-64 64c35.3 0 64 28.7 64 64zm-192 64c0-26.5 21.5-48 48-48c-26.5 0-48-21.5-48-48c0 26.5-21.5 48-48 48c26.5 0 48 21.5 48 48z"/>
+                </svg>
+              </span>
+              <span>IA:</span>
+            </label>
+            <span id="ai-tier-badge" class="ai-tier-badge tier-free" title="Nivel de cuota del modelo activo">Free Tier</span>
+          </div>
+          <select id="active-ai-select" class="lang-select ai-select" title="Selecciona la IA para perfeccionar la traducción local" aria-label="Seleccionar motor de IA">
+            <!-- Opciones cargadas dinámicamente -->
           </select>
-          <span id="auto-mode-hint" class="mode-hint" title="Lógica inteligente activa">
-            (Auto: Si escribes inglés → traduce a español; si escribes español → inglés)
-          </span>
         </div>
       </section>
 
@@ -139,11 +937,31 @@
         <!-- Caja de entrada -->
         <div class="box-card source-card">
           <div class="box-card-header">
-            <span class="box-title">Texto original</span>
+            <span id="source-card-title" class="box-title">Texto original</span>
             <div class="box-header-actions">
               <button id="clear-source-btn" class="btn-text-action" title="Limpiar texto">
-                <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+                <svg viewBox="0 0 384 512" width="13" height="13" fill="currentColor">
+                  <path d="M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z"/>
+                </svg>
                 Limpiar
+              </button>
+            </div>
+          </div>
+
+          <!-- Previsualización de Imagen Adjunta o Pegada (Multimodal) -->
+          <div id="image-preview-container" class="image-preview-container hidden">
+            <div class="image-preview-card">
+              <div class="image-thumb-wrap">
+                <img id="image-preview-thumb" src="" alt="Captura o imagen adjunta" class="image-preview-thumb" />
+              </div>
+              <div class="image-preview-details">
+                <span id="image-preview-name" class="image-preview-name">captura.png</span>
+                <span class="image-preview-badge">Multimodal / Visión activa ⚡</span>
+              </div>
+              <button id="image-remove-btn" class="image-remove-btn" type="button" title="Quitar imagen">
+                <svg viewBox="0 0 384 512" width="12" height="12" fill="currentColor">
+                  <path d="M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z"/>
+                </svg>
               </button>
             </div>
           </div>
@@ -161,14 +979,23 @@
           <div class="box-card-footer">
             <span id="source-stats" class="text-stats">0 caracteres • 0 palabras</span>
             <div class="footer-buttons">
+              <button id="attach-img-btn" class="btn-icon" title="Adjuntar imagen o captura (también puedes pegar directamente con Ctrl+V)" type="button">
+                <svg viewBox="0 0 512 512" width="13" height="13" fill="currentColor">
+                  <path d="M448 80c8.8 0 16 7.2 16 16V416c0 8.8-7.2 16-16 16H64c-8.8 0-16-7.2-16-16V96c0-8.8 7.2-16 16-16H448zM64 32C28.7 32 0 60.7 0 96V416c0 35.3 28.7 64 64 64H448c35.3 0 64-28.7 64-64V96c0-35.3-28.7-64-64-64H64zm320 184a40 40 0 1 0 0-80 40 40 0 1 0 0 80zM128 352h256c8.8 0 16-7.2 16-16s-7.2-16-16-16H128c-8.8 0-16 7.2-16 16s7.2 16 16 16zm-32-64l80-96 64 80 48-60 96 120H96z"/>
+                </svg>
+                <span>Imagen</span>
+              </button>
+              <input type="file" id="image-file-input" accept="image/*" class="hidden">
               <button id="mic-btn" class="btn-icon btn-mic" title="Dictar por voz (requiere permiso de micrófono)" aria-label="Dictar por voz" type="button">
-                <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
-                  <path d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3zm5-3c0 2.76-2.24 5-5 5s-5-2.24-5-5H5c0 3.53 2.61 6.43 6 6.92V21h2v-3.08c3.39-.49 6-3.39 6-6.92h-2z"/>
+                <svg viewBox="0 0 384 512" width="13" height="13" fill="currentColor">
+                  <path d="M192 0C139 0 96 43 96 96V256c0 53 43 96 96 96s96-43 96-96V96c0-53-43-96-96-96zM64 216c0-13.3-10.7-24-24-24s-24 10.7-24 24v40c0 89.1 66.2 162.7 152 174.4V464H120c-13.3 0-24 10.7-24 24s10.7 24 24 24h144c13.3 0 24-10.7 24-24s-10.7-24-24-24H216V430.4c85.8-11.7 152-85.3 152-174.4V216c0-13.3-10.7-24-24-24s-24 10.7-24 24v40c0 70.7-57.3 128-128 128s-128-57.3-128-128V216z"/>
                 </svg>
                 <span id="mic-btn-label">Dictar</span>
               </button>
               <button id="paste-btn" class="btn-icon" title="Pegar portapapeles" type="button">
-                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect></svg>
+                <svg viewBox="0 0 448 512" width="13" height="13" fill="currentColor">
+                  <path d="M160 0c-17.7 0-32 14.3-32 32V64H96C60.7 64 32 92.7 32 128V448c0 35.3 28.7 64 64 64H352c35.3 0 64-28.7 64-64V128c0-35.3-28.7-64-64-64H320V32c0-17.7-14.3-32-32-32H160zM176 64V48h96V64H176zm176 48c8.8 0 16 7.2 16 16V448c0 8.8-7.2 16-16 16H96c-8.8 0-16-7.2-16-16V128c0-8.8 7.2-16 16-16h48v16c0 17.7 14.3 32 32 32h96c17.7 0 32-14.3 32-32V112h48z"/>
+                </svg>
                 Pegar
               </button>
             </div>
@@ -178,10 +1005,20 @@
         <!-- Caja de salida -->
         <div class="box-card target-card">
           <div class="box-card-header">
-            <span class="box-title">Traducción</span>
-            <div id="translating-indicator" class="translating-indicator hidden">
-              <span class="spinner"></span>
-              <span>Traduciendo...</span>
+            <span id="target-card-title" class="box-title">Traducción</span>
+            <div class="target-indicators-wrap">
+              <div id="translating-indicator" class="translating-indicator hidden">
+                <span class="spinner"></span>
+                <span>Traduciendo...</span>
+              </div>
+              <div id="ai-refining-badge" class="ai-refining-badge hidden" title="La IA está perfeccionando la traducción preliminar">
+                <span class="ai-sparkle-spin">
+                  <svg viewBox="0 0 512 512" width="12" height="12" fill="currentColor">
+                    <path d="M433 179.7L274.1 20.9c-27.9-27.9-73.1-27.9-101 0L14.7 179.3c-19.5 19.5-19.5 51.2 0 70.7l141.4 141.4c19.5 19.5 51.2 19.5 70.7 0L385.7 232.5c27.9-27.9 27.9-73.1 0-101l-14.2-14.2 61.5-61.5c6.2-6.2 16.4-6.2 22.6 0l22.6 22.6c6.2 6.2 6.2 16.4 0 22.6l-45.3 45.3 22.6 22.6 45.3-45.3c18.7-18.7 18.7-49.1 0-67.9L433 179.7zM177.4 340.7L37.3 200.6 195.7 42.2l140.1 140.1L177.4 340.7zM448 384c0-35.3 28.7-64 64-64c-35.3 0-64-28.7-64-64c0 35.3-28.7 64-64 64c35.3 0 64 28.7 64 64zm-192 64c0-26.5 21.5-48 48-48c-26.5 0-48-21.5-48-48c0 26.5-21.5 48-48 48c26.5 0 48 21.5 48 48z"/>
+                  </svg>
+                </span>
+                <span id="ai-refining-badge-text">Refinando con IA...</span>
+              </div>
             </div>
           </div>
 
@@ -198,15 +1035,21 @@
             <span id="target-stats" class="text-stats">0 caracteres</span>
             <div class="footer-buttons">
               <button id="speak-btn" class="btn-icon" title="Escuchar pronunciación">
-                <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg>
+                <svg viewBox="0 0 640 512" width="13" height="13" fill="currentColor">
+                  <path d="M533.6 32.5C598.5 85.3 640 165.8 640 256s-41.5 170.8-106.4 223.5c-10.3 8.4-25.4 6.8-33.8-3.5s-6.8-25.4 3.5-33.8C557.5 398.2 592 331.2 592 256s-34.5-142.2-88.7-186.3c-10.3-8.4-11.8-23.5-3.5-33.8s23.5-11.8 33.8-3.5zM473.1 107c43.2 35.2 70.9 88.9 70.9 149s-27.7 113.8-70.9 149c-10.3 8.4-25.4 6.8-33.8-3.5s-6.8-25.4 3.5-33.8C475.3 341.3 496 301.1 496 256s-20.7-85.3-53.2-111.8c-10.3-8.4-11.8-23.5-3.5-33.8s23.5-11.8 33.8-3.5zm-209.2-87c14.2-7.7 31.6-6.3 44.5 3.4L424 112H48c-26.5 0-48 21.5-48 48v192c0 26.5 21.5 48 48 48h112l115.6 88.6c12.9 9.8 30.3 11.1 44.5 3.4s23.9-22.6 23.9-38.6V58.6c0-16-9.7-30.9-23.9-38.6z"/>
+                </svg>
                 Escuchar
               </button>
               <button id="save-favorite-btn" class="btn-icon" title="Guardar traducción en historial">
-                <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                <svg viewBox="0 0 576 512" width="13" height="13" fill="currentColor">
+                  <path d="M316.9 18C311.6 7 300.4 0 288.1 0s-23.4 7-28.8 18L195 150.3 51.4 171.5c-12 1.8-22 10.2-25.7 21.7s-.7 24.2 7.9 32.7L137.8 329 113.2 474.7c-2 12 3 24.2 12.9 31.3s23 8 33.8 2.3l128.3-68.5 128.3 68.5c10.8 5.7 23.9 4.9 33.8-2.3s14.9-19.3 12.9-31.3L438.5 329 542.7 225.9c8.6-8.5 11.7-21.2 7.9-32.7s-13.7-19.9-25.7-21.7L381.2 150.3 316.9 18z"/>
+                </svg>
                 Guardar
               </button>
               <button id="copy-target-btn" class="btn-icon btn-copy" title="Copiar traducción">
-                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                <svg viewBox="0 0 512 512" width="13" height="13" fill="currentColor">
+                  <path d="M224 0c-35.3 0-64 28.7-64 64V288c0 35.3 28.7 64 64 64H448c35.3 0 64-28.7 64-64V64c0-35.3-28.7-64-64-64H224zM64 160c-35.3 0-64 28.7-64 64V448c0 35.3 28.7 64 64 64H288c35.3 0 64-28.7 64-64V384H288v64H64V224h64V160H64z"/>
+                </svg>
                 Copiar
               </button>
             </div>
@@ -228,16 +1071,14 @@
             <input type="file" id="file-input" class="file-input-hidden" accept=".txt,.odt,.odp,.docx,.pptx,.epub,.html,.srt,.pdf,.md">
             <div class="dropzone-content">
               <div class="dropzone-icon">
-                <svg viewBox="0 0 24 24" width="48" height="48" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-                  <polyline points="17 8 12 3 7 8"></polyline>
-                  <line x1="12" y1="3" x2="12" y2="15"></line>
+                <svg viewBox="0 0 640 512" width="44" height="44" fill="currentColor">
+                  <path d="M144 480c-79.5 0-144-64.5-144-144c0-64.3 42.2-118.8 100.8-137.4C108.7 190.6 112 181.7 112 172.4C112 77.2 189.2 0 284.4 0c70.8 0 131.7 43 158.4 104.9C456.9 101.6 472.1 96 488 96c83.9 0 152 68.1 152 152c0 20.3-4 39.7-11.2 57.4C634.3 318.5 640 334.6 640 352c0 70.7-57.3 128-128 128H144zm185-297c-9.4-9.4-24.6-9.4-33.9 0l-80 80c-9.4 9.4-9.4 24.6 0 33.9s24.6 9.4 33.9 0l39-39V368c0 13.3 10.7 24 24 24s24-10.7 24-24V257l39 39c9.4 9.4 24.6 9.4 33.9 0s9.4-24.6 0-33.9l-80-80z"/>
                 </svg>
               </div>
               <p class="dropzone-text">Arrastra y suelta tu archivo aquí, o</p>
               <button id="browse-file-btn" type="button" class="btn btn-primary btn-file-select">
-                <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
-                  <path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm4 18H6V4h7v5h5v11z"/>
+                <svg viewBox="0 0 576 512" width="16" height="16" fill="currentColor">
+                  <path d="M88.7 223.8L0 375.8V96C0 60.7 28.7 32 64 32H181.5c17 0 33.3 6.7 45.3 18.7l26.5 26.5c12 12 28.3 18.7 45.3 18.7H416c35.3 0 64 28.7 64 64v32H144c-22.8 0-43.8 12.1-55.3 31.8zm27.6 16.1C122.1 230 132.6 224 144 224H544c10.7 0 20.7 5.3 26.6 14.1s6.6 20.1 1.9 29.8l-88 184c-5.8 12.1-18.2 19.9-31.6 19.9H85.4c-13.4 0-25.8-7.8-31.6-19.9l-38.6-80.8 77.2-132.3z"/>
                 </svg>
                 SELECCIONAR ARCHIVO
               </button>
@@ -248,8 +1089,8 @@
           <div id="file-preview-card" class="file-preview-card hidden">
             <div class="file-preview-header">
               <div class="file-preview-icon">
-                <svg viewBox="0 0 24 24" width="32" height="32" fill="currentColor">
-                  <path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/>
+                <svg viewBox="0 0 384 512" width="28" height="28" fill="currentColor">
+                  <path d="M64 0C28.7 0 0 28.7 0 64V448c0 35.3 28.7 64 64 64H320c35.3 0 64-28.7 64-64V160H256c-17.7 0-32-14.3-32-32V0H64zM256 0V128H384L256 0zM112 256H272c8.8 0 16 7.2 16 16s-7.2 16-16 16H112c-8.8 0-16-7.2-16-16s7.2-16 16-16zm0 64H272c8.8 0 16 7.2 16 16s-7.2 16-16 16H112c-8.8 0-16-7.2-16-16s7.2-16 16-16zm0 64H208c8.8 0 16 7.2 16 16s-7.2 16-16 16H112c-8.8 0-16-7.2-16-16s7.2-16 16-16z"/>
                 </svg>
               </div>
               <div class="file-preview-meta">
@@ -257,7 +1098,9 @@
                 <span id="preview-filesize" class="preview-filesize">0 KB</span>
               </div>
               <button id="remove-file-btn" class="btn-text-action btn-remove-file" title="Quitar archivo">
-                <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+                <svg viewBox="0 0 384 512" width="13" height="13" fill="currentColor">
+                  <path d="M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z"/>
+                </svg>
                 Quitar
               </button>
             </div>
@@ -265,8 +1108,8 @@
             <!-- Botón de traducir y progreso -->
             <div class="file-action-wrapper">
               <button id="translate-file-btn" class="btn btn-primary btn-lg">
-                <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
-                  <path d="M12.87 15.07l-2.54-2.51.03-.08A19.4 19.4 0 0013.2 6H16V4H9V2H7v2H0v2h11.17C10.5 7.92 9.4 10.1 8.2 12c-.75-.82-1.39-1.8-1.9-2.9l-1.8.8c.6 1.4 1.4 2.6 2.3 3.7l-4.5 4.5 1.4 1.4 4.5-4.5 2.8 2.8.9-2.7zM18.5 10h-2L12 22h2l1.12-3h4.75L21 22h2l-4.5-12zm-2.62 7l1.62-4.33L19.12 17h-3.24z"/>
+                <svg viewBox="0 0 640 512" width="18" height="18" fill="currentColor">
+                  <path d="M152.1 236.2c-3.5-12.1-7.8-24.3-13-36.2l-1.3 4.2c-5.8 18.5-12.8 36.6-21.2 54.1l35.5-22.1zm88.5 76.9c-16.4-31-31.4-65.7-44.8-103.5l1.8-6.1c11.4-38.3 19.3-78.6 23.3-120.3L256 83.2H128V32H80v51.2H0v48h160.8c-3.7 34.6-10.4 67.9-19.8 99.4-10.2-24.9-18.5-51.4-24.7-79.4H68.8c6.6 34.2 16.8 66.8 30.3 97.4-23.7 34.7-53.7 65.5-89.1 91.2l31.5 36.8c42.8-30.8 78.8-68.1 106.8-110.5 20.2 44.9 44.7 86.8 72.8 124.7l39.5-32.9zm135.4-89.9l-64 160h46.2l13.1-34.9h67.4l13.1 34.9H500l-64-160h-60zm10.7 89.1l20.4-54.4 20.4 54.4h-40.8zM576 32H352c-17.7 0-32 14.3-32 32v96h48V80h192v288h-64v48h64c17.7 0 32-14.3 32-32V64c0-17.7-14.3-32-32-32z"/>
                 </svg>
                 Traducir archivo
               </button>
@@ -281,19 +1124,17 @@
               <!-- Descarga del archivo traducido -->
               <div id="file-result-container" class="file-result-container hidden">
                 <div class="result-success-alert">
-                  <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor" style="color: #10b981;">
-                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                  <svg viewBox="0 0 512 512" width="22" height="22" fill="currentColor" style="color: #10b981;">
+                    <path d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM369 209L241 337c-9.4 9.4-24.6 9.4-33.9 0l-64-64c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l47 47L335 175c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9z"/>
                   </svg>
                   <div>
-                    <strong>¡Traducción completada!</strong>
-                    <p>Tu archivo traducido está listo para descargar.</p>
+                    <strong id="file-result-title">¡Traducción completada!</strong>
+                    <p id="file-result-desc">Tu archivo traducido está listo para descargar. Se eliminará del servidor de inmediato tras descargarlo.</p>
                   </div>
                 </div>
                 <a id="download-file-btn" class="btn btn-success btn-lg download-link" href="#" download>
-                  <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-                    <polyline points="7 10 12 15 17 10"></polyline>
-                    <line x1="12" y1="15" x2="12" y2="3"></line>
+                  <svg viewBox="0 0 512 512" width="16" height="16" fill="currentColor">
+                    <path d="M288 32c0-17.7-14.3-32-32-32s-32 14.3-32 32V274.7l-73.4-73.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l128 128c12.5 12.5 32.8 12.5 45.3 0l128-128c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L288 274.7V32zM64 352c-35.3 0-64 28.7-64 64v32c0 35.3 28.7 64 64 64H448c35.3 0 64-28.7 64-64V416c0-35.3-28.7-64-64-64H346.5l-45.3 45.3c-25 25-65.5 25-90.5 0L165.5 352H64zm368 56a24 24 0 1 1 0 48 24 24 0 1 1 0-48z"/>
                   </svg>
                   DESCARGAR ARCHIVO TRADUCIDO
                 </a>
@@ -309,6 +1150,9 @@
             <span id="history-count-badge" class="badge">0</span>
           </div>
           <button id="clear-all-history-btn" class="btn btn-secondary btn-sm" disabled>
+            <svg viewBox="0 0 448 512" width="12" height="12" fill="currentColor">
+              <path d="M135.2 17.7L128 32H32C14.3 32 0 46.3 0 64S14.3 96 32 96H416c17.7 0 32-14.3 32-32s-14.3-32-32-32H320l-7.2-14.3C307.4 6.8 296.3 0 284.2 0H163.8c-12.1 0-23.2 6.8-28.6 17.7zM416 128H32L53.2 467c1.6 25.3 22.6 45 47.9 45H346.9c25.3 0 46.3-19.7 47.9-45L416 128z"/>
+            </svg>
             Vaciar historial
           </button>
         </div>
@@ -342,6 +1186,6 @@
     </footer>
   </div>
 
-  <script src="app.js?v=2.2"></script>
+  <script src="app.js?v=2.5"></script>
 </body>
 </html>
