@@ -70,7 +70,9 @@
   - Reorganización de elementos siguiendo flujo lógico natural: `Origen` ⇄ `Destino` y `Selector de IA` en zona lateral/independiente.
   - Implementación de arquitectura vertical por bloque (`.lang-label-wrap` sobre cada `<select>`), evitando que badges y textos de ayuda aplasten o trunquen los selectores.
   - Estrategia responsive integral con Flexbox/Grid fluido para Desktop (>960px), Tablet (600px-960px) y Móvil (<600px), garantizando áreas táctiles (touch targets >= 40px) y cero solapamiento o clipping.
-- **Versión Activa**: v3.3 desplegada en `https://translate.local`, `http://translate.local` y `http://localhost`.
+- **Documentación y README Actualizados**:
+  - `README.md` actualizado en su totalidad reflejando la integración de los 7 proveedores de IA (Gemini, Claude, ChatGPT, DeepSeek, Meta AI, OpenRouter y Cerebras), el nuevo modo de generación de prompts para programadores con soporte multimodal, la traducción de archivos con refinamiento y autodestrucción (zero-storage), la guía de variables de entorno y la estructura de archivos.
+- **Versión Activa**: v3.4 desplegada en `https://translate.local`, `http://translate.local` y `http://localhost`.
 - **Barras de Desplazamiento Sutiles y Delgadas**: Implementación global de scrollbars ultradelgados (6px), minimalistas y redondeados (estilo macOS/iOS) para toda la aplicación (ventana principal, modales administrativos, cuadros de texto y listas), eliminando botones de flecha invasivos y adaptando su opacidad automáticamente al modo claro y oscuro.
 - **Arranque Automático**: Configurado con política `restart: always` en Docker Compose y servicio systemd opcional (`traductor-local.service`).
 - **Dominio y Puertos**: Mapeado al puerto estándar `80` (HTTP) y `8080`. Accesible vía `http://translate.local` y `http://localhost`.
