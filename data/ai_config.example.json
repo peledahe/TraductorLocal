@@ -1,0 +1,51 @@
+{
+  "gemini": {
+    "name": "Gemini",
+    "enabled": false,
+    "apiKey": "",
+    "model": "gemini-3.5-flash-lite",
+    "useFreeTier": true
+  },
+  "claude": {
+    "name": "Claude",
+    "enabled": false,
+    "apiKey": "",
+    "model": "claude-haiku-5-5",
+    "useFreeTier": false
+  },
+  "chatgpt": {
+    "name": "ChatGPT",
+    "enabled": false,
+    "apiKey": "",
+    "model": "gpt-4o-mini",
+    "useFreeTier": false
+  },
+  "deepseek": {
+    "name": "DeepSeek",
+    "enabled": false,
+    "apiKey": "",
+    "model": "deepseek-chat",
+    "useFreeTier": false
+  },
+  "meta": {
+    "name": "Meta AI",
+    "enabled": false,
+    "apiKey": "",
+    "model": "llama-3.3-70b-versatile",
+    "useFreeTier": false
+  },
+  "openrouter": {
+    "name": "OpenRouter",
+    "enabled": false,
+    "apiKey": "",
+    "model": "meta-llama/llama-3.3-70b-instruct:free",
+    "useFreeTier": false
+  },
+  "cerebras": {
+    "name": "Cerebras",
+    "enabled": false,
+    "apiKey": "",
+    "model": "llama3.3-70b",
+    "useFreeTier": false
+  }
+}
